@@ -1,0 +1,3850 @@
+openapi: 3.0.0
+servers:
+  - url: "https://api.smaregi.dev"
+    description: 開発環境
+  - url: "https://api.smaregi.jp"
+    description: 本番環境
+info:
+  description: ""
+  version: 1.0.0
+  title: スマレジ
+  termsOfService: ""
+  contact:
+    email: ""
+tags: []
+paths:
+  "/{contract_id}/pos/customers":
+    get:
+      summary: 会員情報一覧を取得します。
+      operationId: getCustomers
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/getCustomersItem"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/customer_code_query"
+    post:
+      summary: 会員情報を登録します。
+      description: ""
+      operationId: createCustomers
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomersResponseOfCreate"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createCustomers"
+  "/{contract_id}/pos/customers/{customer_id}":
+    patch:
+      summary: ""
+      operationId: updateCustomers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomersResponseOfCreate"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/patchCustomers"
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+        - $ref: "#/components/parameters/customer_id"
+  "/{contract_id}/pos/transactions":
+    get:
+      summary: 取引情報一覧を取得します。
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ""
+                items:
+                  $ref: "#/components/schemas/getTransactionItem"
+      operationId: getTransaction
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+        - $ref: "#/components/parameters/sum_date"
+        - $ref: "#/components/parameters/with_layaway"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+        - schema:
+            type: string
+          in: query
+          name: upd_date_time-to
+          description: "更新日時(To)：登録時・更新時の日時。[YYYY-MM-DDThh:mm:ssTZD]"
+        - schema:
+            type: string
+          in: query
+          name: upd_date_time-from
+          description: "更新日時(From)：登録時・更新時の日時。[YYYY-MM-DDThh:mm:ssTZD]"
+        - schema:
+            type: string
+          in: query
+          name: customer_code
+          description: 会員コード
+        - $ref: "#/components/parameters/transaction_head_division"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/terminal_tran_date_time-from"
+        - $ref: "#/components/parameters/terminal_tran_date_time-to"
+  "/{contract_id}/pos/transactions/{transaction_id}":
+    get:
+      summary: 取引情報を取得します。
+      operationId: getTransactionId
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+        - $ref: "#/components/parameters/transaction_id"
+        - $ref: "#/components/parameters/with_coupons"
+        - $ref: "#/components/parameters/with_details"
+        - $ref: "#/components/parameters/with_store"
+        - $ref: "#/components/parameters/with_customer"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTransactionId"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  "/{contract_id}/pos/transactions/layaways":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/sum_date"
+      - $ref: "#/components/parameters/with_layaway"
+    get:
+      summary: 取置き一覧を取得します。
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/getLayawayListItem"
+      operationId: getLayawayList
+  "/{contract_id}/pos/transactions/layaways/{layaway_id}":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - schema:
+          type: string
+        name: layaway_id
+        in: path
+        required: true
+      - $ref: "#/components/parameters/with_details"
+      - $ref: "#/components/parameters/with_store"
+      - $ref: "#/components/parameters/with_customer"
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getLayawayById"
+      operationId: getLayawayById
+  "/{contract_id}/pos/coupons":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getCouponsResponse"
+      operationId: getCoupons
+      description: クーポンの一覧を取得します。
+    post:
+      summary: ""
+      operationId: postCreateCoupons
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/coupon"
+      description: "クーポンを登録します。 "
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postCreateCoupons"
+  "/{contract_id}/pos/coupons/{coupon_id}":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/coupon_id"
+    delete:
+      summary: ""
+      operationId: deleteCoupons
+      responses:
+        "200":
+          description: OK
+      description: "指定されたクーポンを削除します。 "
+  "/{contract_id}/pos/stores":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+    get:
+      summary: 店舗一覧取得
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getStoresResponse"
+              examples: {}
+      operationId: getStores
+      description: "店舗情報一覧を取得します。 "
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/with_point_condition"
+  "/{contract_id}/pos/customers/{customer_id}/point":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/customer_id"
+    patch:
+      summary: 会員ポイント更新
+      operationId: updateCustomerPoint
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateCustomerPointResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      description: |-
+        会員ポイント情報を更新します。
+        ポイントおよびマイルは、入力された値と同じになるよう更新します。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateCustomerPointRequest"
+        description: ""
+  "/{contract_id}/pos/customers/{customer_id}/point/add":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/customer_id"
+    post:
+      summary: ""
+      operationId: updateCustomerPointRelative
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateCustomerPointResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      description: |-
+        会員ポイント情報を更新します。
+        ポイントおよびマイルは、現在の値に対し、入力された値を加算（入力値が負の場合は減算）した値に更新します。
+        現在値参照にあたりポイント有効期限を参照し、ポイント残高がありかつ期限が切れていれば期限切れ分のポイント失効処理を行ってから加算を行います（失効で0になっているので減算はエラー）。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateCustomerPointRequest"
+  "/{contract_id}/pos/customers/point":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+    get:
+      summary: 会員ポイント一覧取得
+      tags: []
+      responses:
+        "200":
+          $ref: "#/components/responses/getCustomerPointListResponse"
+      operationId: getCustomerPointList
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/with_customer_id"
+      description: |-
+        会員ポイント情報一覧を取得します。
+        参照にあたりポイント有効期限を参照し、ポイント残高がありかつ期限が切れていれば期限切れ分のポイント失効処理を行ってから返します。
+  "/{contract_id}/pos/stores/{store_id}":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/store_id"
+    patch:
+      summary: 店舗更新
+      operationId: updateStore
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateStoreResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      description: "店舗情報を更新します。 "
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateStoreRequest"
+security:
+  - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      name: Authorization
+      type: http
+      scheme: bearer
+      in: header
+  parameters:
+    transaction_id:
+      name: transaction_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 取引id
+    contract_id:
+      name: contract_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 契約id
+    customer_id:
+      name: customer_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 顧客id
+    coupon_id:
+      name: coupon_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: クーポンid
+    customer_code_query:
+      name: customer_code
+      description: 顧客コード
+      in: query
+      schema:
+        type: string
+    sum_date:
+      name: sum_date
+      in: query
+      description: "締め日 [YYYY-MM-DD]"
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: 一度に返すアイテム数 (上限 1000)
+      schema:
+        type: integer
+    page:
+      name: page
+      in: query
+      description: ページ
+      schema:
+        type: integer
+    with_layaway:
+      in: query
+      name: with_layaway
+      description: "取置き情報を付加するか(付加する場合はall, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_enum"
+    with_coupons:
+      in: query
+      name: with_coupons
+      description: "クーポン情報を付加するか(付加する場合はall, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_enum"
+    with_details:
+      in: query
+      name: with_details
+      description: "取引明細情報を付加するか(全項目付加する場合はall, 一部項目を付加する場合はsummary, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_details"
+    with_store:
+      in: query
+      name: with_store
+      description: "店舗情報を付加するか(付加する場合はall, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_enum"
+    with_customer:
+      in: query
+      name: with_customer
+      description: "会員情報を付加するか(付加する場合はall, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_enum"
+    with_point_condition:
+      in: query
+      name: with_point_condition
+      description: "ポイント情報を付加するか(付加する場合はall, しない場合はnone)"
+      schema:
+        $ref: "#/components/schemas/with_enum"
+    store_id:
+      name: store_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 店舗id
+    transaction_head_division:
+      name: transaction_head_division
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/transactionHeadDivision"
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/sort"
+    terminal_tran_date_time-from:
+      name: terminal_tran_date_time-from
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]"
+    terminal_tran_date_time-to:
+      name: terminal_tran_date_time-to
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]"
+    with_customer_id:
+      name: customer_id
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 顧客id
+  schemas:
+    with_details:
+      type: string
+      title: with_*
+      enum:
+        - all
+        - summary
+        - none
+      default: none
+    with_enum:
+      type: string
+      title: with_*
+      enum:
+        - all
+        - none
+      default: none
+    sex:
+      type: string
+      title: sex
+      enum:
+        - "0"
+        - "1"
+        - "2"
+      default: "0"
+      x-enum-varnames:
+        - UnKnown
+        - Male
+        - Female
+      description: "（0:不明、1:男、2:女）"
+    mailReceiveFlag:
+      type: string
+      title: mailReceiveFlag
+      enum:
+        - "0"
+        - "1"
+      default: "1"
+      x-enum-varnames:
+        - Deny
+        - Allow
+      description: |
+        (0:拒否、1:許可)
+    status:
+      type: string
+      title: status
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+      x-enum-varnames:
+        - Enabled
+        - Disabled
+        - Lost
+        - Withdrawn
+        - Merged
+      description: "(0:利用可、1:利用停止、2:紛失、3:退会、4:名寄せ)"
+    createCustomers:
+      description: ""
+      type: object
+      properties:
+        customerCode:
+          type: string
+          minLength: 1
+        customerNo:
+          type: string
+          minLength: 1
+        rank:
+          type: string
+          minLength: 1
+        staffRank:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstKana:
+          type: string
+          minLength: 1
+        lastKana:
+          type: string
+          minLength: 1
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mobileNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        mailAddress2:
+          type: string
+          minLength: 1
+        mailAddress3:
+          type: string
+          minLength: 1
+        companyName:
+          type: string
+          minLength: 1
+        departmentName:
+          type: string
+          minLength: 1
+        managerialPosition:
+          type: string
+          minLength: 1
+        sex:
+          $ref: "#/components/schemas/sex"
+        birthDate:
+          type: string
+          minLength: 1
+        pointExpireDate:
+          type: string
+          minLength: 1
+        entryDate:
+          type: string
+          minLength: 1
+        leaveDate:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pinCode:
+          type: string
+          minLength: 1
+        passportNo:
+          type: string
+          minLength: 1
+        nationality:
+          type: string
+          minLength: 1
+        alphabetName:
+          type: string
+          minLength: 1
+        mailReceiveFlag:
+          $ref: "#/components/schemas/mailReceiveFlag"
+        note:
+          type: string
+          minLength: 1
+        note2:
+          type: string
+          minLength: 1
+        favoriteList:
+          type: string
+          minLength: 1
+        browsingList:
+          type: string
+          minLength: 1
+        status:
+          $ref: "#/components/schemas/status"
+        storeId:
+          type: string
+          minLength: 1
+      required:
+        - customerCode
+        - firstName
+        - lastName
+    CustomersResponseOfCreate:
+      description: POS APIの型表現にバグと思われる矛盾があるため、CustomersResponseを流用できない
+      type: object
+      properties:
+        customerId:
+          type: object
+          minLength: 1
+        customerCode:
+          type: string
+          minLength: 1
+        customerNo:
+          type: string
+          minLength: 1
+        rank:
+          type: string
+          minLength: 1
+        staffRank:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstKana:
+          type: string
+          minLength: 1
+        lastKana:
+          type: string
+          minLength: 1
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mobileNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        mailAddress2:
+          type: string
+          minLength: 1
+        mailAddress3:
+          type: string
+          minLength: 1
+        companyName:
+          type: string
+          minLength: 1
+        departmentName:
+          type: string
+          minLength: 1
+        managerialPosition:
+          type: string
+          minLength: 1
+        sex:
+          $ref: "#/components/schemas/sex"
+        birthDate:
+          type: string
+          minLength: 1
+        pointExpireDate:
+          type: string
+          minLength: 1
+        lastComeDateTime:
+          type: string
+          minLength: 1
+        entryDate:
+          type: string
+          minLength: 1
+        leaveDate:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pinCode:
+          type: string
+          minLength: 1
+        passportNo:
+          type: string
+          minLength: 1
+        nationality:
+          type: string
+          minLength: 1
+        alphabetName:
+          type: string
+          minLength: 1
+        mailReceiveFlag:
+          $ref: "#/components/schemas/mailReceiveFlag"
+        note:
+          type: string
+          minLength: 1
+        note2:
+          type: string
+          minLength: 1
+        favoriteList:
+          type: string
+          minLength: 1
+        browsingList:
+          type: string
+          minLength: 1
+        status:
+          $ref: "#/components/schemas/status"
+        storeId:
+          type: string
+          minLength: 1
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+      required:
+        - customerId
+      title: CustomersResponse
+    getCustomersItem:
+      description: ""
+      type: object
+      title: getCustomersItem
+      properties:
+        customerId:
+          type: string
+          minLength: 1
+        customerCode:
+          type: string
+          minLength: 1
+        customerNo: {}
+        rank: {}
+        staffRank: {}
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstKana: {}
+        lastKana: {}
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber: {}
+        mobileNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+        mailAddress2:
+          type: string
+        mailAddress3:
+          type: string
+        companyName: {}
+        departmentName: {}
+        managerialPosition: {}
+        sex:
+          $ref: "#/components/schemas/sex"
+        birthDate: {}
+        pointExpireDate: {}
+        lastComeDateTime: {}
+        entryDate: {}
+        leaveDate:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice: {}
+        pointGivingUnit: {}
+        pinCode: {}
+        passportNo: {}
+        nationality: {}
+        alphabetName: {}
+        mailReceiveFlag:
+          $ref: "#/components/schemas/mailReceiveFlag"
+        note: {}
+        note2: {}
+        favoriteList: {}
+        browsingList: {}
+        status:
+          $ref: "#/components/schemas/status"
+        storeId: {}
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+      required:
+        - customerId
+        - customerCode
+        - sex
+        - mailReceiveFlag
+        - status
+        - insDateTime
+        - updDateTime
+    error:
+      description: ""
+      type: object
+      properties:
+        type:
+          type: string
+          minLength: 1
+        title:
+          type: string
+          minLength: 1
+        detail:
+          type: string
+          minLength: 1
+        # numbericな型が入っていると、serdeの Untagged enum represation のdeserializeが上手くいかない :baloon:
+        # status:
+        #   type: number
+    patchCustomers:
+      description: ""
+      type: object
+      properties:
+        customerCode:
+          type: string
+          minLength: 1
+        customerNo:
+          type: string
+          minLength: 1
+        rank:
+          type: string
+          minLength: 1
+        staffRank:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstKana:
+          type: string
+          minLength: 1
+        lastKana:
+          type: string
+          minLength: 1
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mobileNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        mailAddress2:
+          type: string
+          minLength: 1
+        mailAddress3:
+          type: string
+          minLength: 1
+        companyName:
+          type: string
+          minLength: 1
+        departmentName:
+          type: string
+          minLength: 1
+        managerialPosition:
+          type: string
+          minLength: 1
+        sex:
+          $ref: "#/components/schemas/sex"
+        birthDate:
+          type: string
+          minLength: 1
+        pointExpireDate:
+          type: string
+          minLength: 1
+        entryDate:
+          type: string
+          minLength: 1
+        leaveDate:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pinCode:
+          type: string
+          minLength: 1
+        passportNo:
+          type: string
+          minLength: 1
+        nationality:
+          type: string
+          minLength: 1
+        alphabetName:
+          type: string
+          minLength: 1
+        mailReceiveFlag:
+          $ref: "#/components/schemas/mailReceiveFlag"
+        note:
+          type: string
+          minLength: 1
+        note2:
+          type: string
+          minLength: 1
+        favoriteList:
+          type: string
+          minLength: 1
+        browsingList:
+          type: string
+          minLength: 1
+        status:
+          $ref: "#/components/schemas/status"
+        storeId:
+          type: string
+          minLength: 1
+    layawayPickUp:
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        layawayServerTransactionHeadId:
+          type: string
+          minLength: 1
+        receivedDepositCash:
+          type: string
+          minLength: 1
+        receivedDepositCredit:
+          type: string
+          minLength: 1
+    layaway:
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        pickUpDate:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          minLength: 1
+        partPayment:
+          type: string
+          minLength: 1
+        partPaymentClass:
+          type: string
+          minLength: 1
+        pickUpTransactionHeadId:
+          type: string
+          minLength: 1
+        disabledEdit:
+          type: string
+          minLength: 1
+    depositOthers:
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        "no":
+          type: string
+          minLength: 1
+        paymentMethodId:
+          type: string
+          minLength: 1
+        paymentMethodName:
+          type: string
+          minLength: 1
+        depositOthers:
+          type: string
+          minLength: 1
+        paymentUnitPrice:
+          type: string
+          minLength: 1
+        paymentChangeFlag:
+          type: number
+        paymentDivision:
+          type: string
+          minLength: 1
+        paymentSecuritiesFlag:
+          type: number
+    getTransactionItem:
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        transactionDateTime:
+          type: string
+          minLength: 1
+        transactionHeadDivision:
+          $ref: "#/components/schemas/transactionHeadDivision"
+        cancelDivision:
+          $ref: "#/components/schemas/cancelDivision"
+          minLength: 1
+        unitNonDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitStaffDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitBargainDiscountsubtotal:
+          type: string
+          minLength: 1
+        subtotal:
+          type: string
+          minLength: 1
+        subtotalForDiscount:
+          type: string
+          minLength: 1
+        subtotalDiscountPrice:
+          type: string
+          minLength: 1
+        subtotalDiscountRate:
+          type: string
+          minLength: 1
+        subtotalDiscountDivision:
+          type: string
+          minLength: 1
+        pointDiscount:
+          type: string
+          minLength: 1
+        couponDiscount:
+          type: string
+          minLength: 1
+        total:
+          type: string
+          minLength: 1
+        taxInclude:
+          type: string
+          minLength: 1
+        taxExclude:
+          type: string
+          minLength: 1
+        roundingDivision:
+          type: string
+          minLength: 1
+        roundingPrice:
+          type: string
+          minLength: 1
+        cashTotal:
+          type: string
+          minLength: 1
+        creditTotal:
+          type: string
+          minLength: 1
+        deposit:
+          type: string
+          minLength: 1
+        depositCash:
+          type: string
+          minLength: 1
+        depositCredit:
+          type: string
+          minLength: 1
+        change:
+          type: string
+          minLength: 1
+        tipCash:
+          type: string
+          minLength: 1
+        tipCredit:
+          type: string
+          minLength: 1
+        amount:
+          type: string
+          minLength: 1
+        returnAmount:
+          type: string
+          minLength: 1
+        costTotal:
+          type: string
+          minLength: 1
+        salesHeadDivision:
+          type: string
+          minLength: 1
+        inTaxSalesTotal:
+          type: string
+          minLength: 1
+        outTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetOutTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetInTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTaxFreeTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetCostTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetAmount:
+          type: string
+          minLength: 1
+        nonSalesTargetReturnAmount:
+          type: string
+          minLength: 1
+        newPoint:
+          type: string
+          minLength: 1
+        spendPoint:
+          type: string
+          minLength: 1
+        point:
+          type: string
+          minLength: 1
+        totalPoint:
+          type: string
+          minLength: 1
+        currentMile:
+          type: string
+          minLength: 1
+        earnMile:
+          type: string
+          minLength: 1
+        totalMile:
+          type: string
+          minLength: 1
+        adjustmentMile:
+          type: string
+          minLength: 1
+        adjustmentMileDivision:
+          type: string
+          minLength: 1
+        adjustmentMileValue:
+          type: string
+          minLength: 1
+        storeId:
+          type: string
+          minLength: 1
+        storeCode:
+          type: string
+          minLength: 1
+        terminalId:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        customerCode:
+          type: string
+          minLength: 1
+        terminalTranId:
+          type: string
+          minLength: 1
+        terminalTranDateTime:
+          type: string
+          minLength: 1
+        sumDivision:
+          type: string
+          minLength: 1
+        adjustmentDateTime:
+          type: string
+          minLength: 1
+        sumDate:
+          type: string
+          minLength: 1
+        customerRank:
+          type: string
+          minLength: 1
+        customerGroupId:
+          type: string
+          minLength: 1
+        customerGroupId2:
+          type: string
+          minLength: 1
+        customerGroupId3:
+          type: string
+          minLength: 1
+        customerGroupId4:
+          type: string
+          minLength: 1
+        customerGroupId5:
+          type: string
+          minLength: 1
+        staffId:
+          type: string
+          minLength: 1
+        staffCode:
+          type: string
+          minLength: 1
+        staffName:
+          type: string
+          minLength: 1
+        creditDivision:
+          type: string
+          minLength: 1
+        paymentCount:
+          type: string
+          minLength: 1
+        slipNumber:
+          type: string
+          minLength: 1
+        cancelSlipNumber:
+          type: string
+          minLength: 1
+        authNumber:
+          type: string
+          minLength: 1
+        authDate:
+          type: string
+          minLength: 1
+        cardCompany:
+          type: string
+          minLength: 1
+        denomination:
+          type: string
+          minLength: 1
+        memo:
+          type: string
+          minLength: 1
+        receiptMemo:
+          type: string
+          minLength: 1
+        carriage:
+          type: string
+          minLength: 1
+        commission:
+          type: string
+          minLength: 1
+        guestNumbers:
+          type: string
+          minLength: 1
+        guestNumbersMale:
+          type: string
+          minLength: 1
+        guestNumbersFemale:
+          type: string
+          minLength: 1
+        guestNumbersUnknown:
+          type: string
+          minLength: 1
+        enterDateTime:
+          type: string
+          minLength: 1
+        taxFreeSalesDivision:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxExclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxExclude:
+          type: string
+          minLength: 1
+        tags:
+          type: string
+          minLength: 1
+        pointGivingDivision:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pointSpendDivision:
+          type: string
+          minLength: 1
+        mileageDivision:
+          type: string
+          minLength: 1
+        mileageLabel:
+          type: string
+          minLength: 1
+        customerPinCode:
+          type: string
+          minLength: 1
+        returnSales:
+          $ref: "#/components/schemas/returnSales"
+        disposeDivision:
+          $ref: "#/components/schemas/disposeDivision"
+          minLength: 1
+        disposeServerTransactionHeadId:
+          type: string
+          minLength: 1
+        cancelDateTime:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: string
+          minLength: 1
+        taxRate:
+          type: string
+          minLength: 1
+        taxRounding:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: string
+          minLength: 1
+        transactionUuid:
+          type: string
+          minLength: 1
+        exchangeTicketNo:
+          type: string
+          minLength: 1
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        barcode:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        depositOthers:
+          type: array
+          items:
+            $ref: "#/components/schemas/depositOthers"
+        layaway:
+          $ref: "#/components/schemas/layaway"
+        layawayPickUp:
+          $ref: "#/components/schemas/layawayPickUp"
+      required:
+        - transactionHeadId
+        - transactionHeadDivision
+        - terminalTranDateTime
+        - returnSales
+    staff:
+      description: ""
+      type: object
+      properties:
+        staffId:
+          type: string
+          minLength: 1
+        staffCode:
+          type: string
+          minLength: 1
+        staffName:
+          type: string
+          minLength: 1
+        rank:
+          type: string
+          minLength: 1
+    transactionDetail:
+      description: ""
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        transactionDetailId:
+          type: string
+          minLength: 1
+        parentTransactionDetailId:
+          type: string
+          minLength: 1
+        transactionDetailDivision:
+          $ref: "#/components/schemas/transactionDetailDivision"
+        productId:
+          type: string
+          minLength: 1
+        productCode:
+          type: string
+          minLength: 1
+        productName:
+          type: string
+          minLength: 1
+        printReceiptProductName:
+          type: string
+          minLength: 1
+        color:
+          type: string
+          minLength: 1
+        size:
+          type: string
+          minLength: 1
+        groupCode:
+          type: string
+          minLength: 1
+        taxDivision:
+          $ref: "#/components/schemas/taxDivision"
+        price:
+          type: string
+          minLength: 1
+        salesPrice:
+          type: string
+          minLength: 1
+        unitDiscountPrice:
+          type: string
+          minLength: 1
+        unitDiscountRate:
+          type: string
+          minLength: 1
+        unitDiscountDivision:
+          type: string
+          minLength: 1
+        cost:
+          type: string
+          minLength: 1
+        quantity:
+          type: string
+          minLength: 1
+        unitNonDiscountSum:
+          type: string
+          minLength: 1
+        unitDiscountSum:
+          type: string
+          minLength: 1
+        unitDiscountedSum:
+          type: string
+          minLength: 1
+        costSum:
+          type: string
+          minLength: 1
+        categoryId:
+          type: string
+          minLength: 1
+        categoryName:
+          type: string
+          minLength: 1
+        discriminationNo:
+          type: string
+          minLength: 1
+        salesDivision:
+          $ref: "#/components/schemas/salesDivision"
+        productDivision:
+          $ref: "#/components/schemas/productDivision"
+        inventoryReservationDivision:
+          type: string
+          minLength: 1
+        pointNotApplicable:
+          type: string
+          minLength: 1
+        calcDiscount:
+          type: string
+          minLength: 1
+        taxFreeDivision:
+          type: string
+          minLength: 1
+        taxFreeCommodityPrice:
+          type: string
+          minLength: 1
+        taxFree:
+          type: string
+          minLength: 1
+        productBundleGroupId:
+          type: string
+          minLength: 1
+        discountPriceProportional:
+          type: string
+          minLength: 1
+        discountPointProportional:
+          type: string
+          minLength: 1
+        discountCouponProportional:
+          type: string
+          minLength: 1
+        taxIncludeProportional:
+          type: string
+          minLength: 1
+        taxExcludeProportional:
+          type: string
+          minLength: 1
+        productBundleProportional:
+          type: string
+          minLength: 1
+        staffDiscountProportional:
+          type: string
+          minLength: 1
+        bargainDiscountProportional:
+          type: string
+          minLength: 1
+        roundingPriceProportional:
+          type: string
+          minLength: 1
+        productStaffDiscountRate:
+          type: string
+          minLength: 1
+        staffRank:
+          type: string
+          minLength: 1
+        staffRankName:
+          type: string
+          minLength: 1
+        staffDiscountRate:
+          type: string
+          minLength: 1
+        staffDiscountDivision:
+          type: string
+          minLength: 1
+        applyStaffDiscountRate:
+          type: string
+          minLength: 1
+        applyStaffDiscountPrice:
+          type: string
+          minLength: 1
+        bargainId:
+          type: string
+          minLength: 1
+        bargainName:
+          type: string
+          minLength: 1
+        bargainDivision:
+          type: string
+          minLength: 1
+        bargainValue:
+          type: string
+          minLength: 1
+        applyBargainValue:
+          type: string
+          minLength: 1
+        applyBargainDiscountPrice:
+          type: string
+          minLength: 1
+        taxRate:
+          type: string
+          minLength: 1
+        standardTaxRate:
+          type: string
+          minLength: 1
+        modifiedTaxRate:
+          type: string
+          minLength: 1
+        reduceTaxId:
+          type: string
+          minLength: 1
+        reduceTaxName:
+          type: string
+          minLength: 1
+        reduceTaxRate:
+          type: string
+          minLength: 1
+        reduceTaxPrice:
+          type: string
+          minLength: 1
+        reduceTaxMemberPrice:
+          type: string
+          minLength: 1
+      required:
+        - transactionHeadId
+        - transactionDetailId
+        - terminalTranDateTime
+        - transactionDetailDivision
+        - quantity
+    store:
+      description: ""
+      type: object
+      properties:
+        storeId:
+          type: string
+          minLength: 1
+        storeCode:
+          type: string
+          minLength: 1
+        storeName:
+          type: string
+          minLength: 1
+        storeAbbr:
+          type: string
+          minLength: 1
+        printReceiptStoreName:
+          type: string
+          minLength: 1
+        displaySequence:
+          type: string
+          minLength: 1
+    customer:
+      description: ""
+      type: object
+      properties:
+        customerId:
+          type: string
+          minLength: 1
+        customerCode:
+          type: string
+          minLength: 1
+        customerNo:
+          type: string
+          minLength: 1
+        rank:
+          type: string
+          minLength: 1
+        staffRank:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        firstKana:
+          type: string
+          minLength: 1
+        lastKana:
+          type: string
+          minLength: 1
+        sex:
+          type: string
+          minLength: 1
+        birthDate:
+          type: string
+          minLength: 1
+        pointExpireDate:
+          type: string
+          minLength: 1
+        lastComeDateTime:
+          type: string
+          minLength: 1
+        entryDate:
+          type: string
+          minLength: 1
+        leaveDate:
+          type: string
+          minLength: 1
+      required:
+        - customerId
+    couponsForTransactions:
+      description: ""
+      type: object
+      required:
+        - couponId
+      properties:
+        transactionCouponId:
+          type: string
+          minLength: 1
+        terminalTranCouponId:
+          type: string
+          minLength: 1
+        couponId:
+          type: string
+          minLength: 1
+        couponName:
+          type: string
+          minLength: 1
+        couponDivision:
+          $ref: "#/components/schemas/couponDivision"
+        serialNumber:
+          type: string
+          minLength: 1
+        awardType:
+          $ref: "#/components/schemas/awardType"
+        awardValue:
+          type: string
+          minLength: 1
+        discountPrice:
+          type: string
+          minLength: 1
+    couponItemsForTransactions:
+      description: ""
+      type: object
+      properties:
+        transactionCouponDetailId:
+          type: string
+          minLength: 1
+        transactionCouponId:
+          type: string
+          minLength: 1
+        terminalTranCouponId:
+          type: string
+          minLength: 1
+        transactionDetailId:
+          type: string
+          minLength: 1
+        couponItemId:
+          type: string
+          minLength: 1
+    customerGroup:
+      description: ""
+      type: object
+      properties:
+        customerGroupId:
+          type: string
+          minLength: 1
+        customerGroupSectionId:
+          type: string
+          minLength: 1
+        label:
+          type: string
+          minLength: 1
+    getTransactionId:
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        transactionDateTime:
+          type: string
+          minLength: 1
+        transactionHeadDivision:
+          $ref: "#/components/schemas/transactionHeadDivision"
+        cancelDivision:
+          $ref: "#/components/schemas/cancelDivision"
+        unitNonDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitStaffDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitBargainDiscountsubtotal:
+          type: string
+          minLength: 1
+        subtotal:
+          type: string
+          minLength: 1
+        subtotalForDiscount:
+          type: string
+          minLength: 1
+        subtotalDiscountPrice:
+          type: string
+          minLength: 1
+        subtotalDiscountRate:
+          type: string
+          minLength: 1
+        subtotalDiscountDivision:
+          type: string
+          minLength: 1
+        pointDiscount:
+          type: string
+          minLength: 1
+        couponDiscount:
+          type: string
+          minLength: 1
+        total:
+          type: string
+          minLength: 1
+        taxInclude:
+          type: string
+          minLength: 1
+        taxExclude:
+          type: string
+          minLength: 1
+        roundingDivision:
+          type: string
+          minLength: 1
+        roundingPrice:
+          type: string
+          minLength: 1
+        cashTotal:
+          type: string
+          minLength: 1
+        creditTotal:
+          type: string
+          minLength: 1
+        deposit:
+          type: string
+          minLength: 1
+        depositCash:
+          type: string
+          minLength: 1
+        depositCredit:
+          type: string
+          minLength: 1
+        change:
+          type: string
+          minLength: 1
+        tipCash:
+          type: string
+          minLength: 1
+        tipCredit:
+          type: string
+          minLength: 1
+        amount:
+          type: string
+          minLength: 1
+        returnAmount:
+          type: string
+          minLength: 1
+        costTotal:
+          type: string
+          minLength: 1
+        salesHeadDivision:
+          type: string
+          minLength: 1
+        inTaxSalesTotal:
+          type: string
+          minLength: 1
+        outTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetOutTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetInTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTaxFreeTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetCostTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetAmount:
+          type: string
+          minLength: 1
+        nonSalesTargetReturnAmount:
+          type: string
+          minLength: 1
+        newPoint:
+          type: string
+          minLength: 1
+          description: 付与ポイント：取引で付与されるポイント。 合計 * ポイント付与率
+        spendPoint:
+          type: string
+          minLength: 1
+          description: 使用ポイント：取引で使用したポイント。
+        point:
+          type: string
+          minLength: 1
+          description: |-
+            現在ポイント：取引前のポイント。
+            ※ ポイント値の直接入力は9桁まで可能です。ただし、ポイントの加算により9桁を超える値が発生することもあり得ます。
+        totalPoint:
+          type: string
+          minLength: 1
+          description: "\t\nstring\n\n合計ポイント：取引後のポイント 現在ポイント + 付与ポイント - 使用ポイント。\n※ ポイント値の直接入力は9桁まで可能です。ただし、ポイントの加算により9桁を超える値が発生することもあり得ます。"
+        currentMile:
+          type: string
+          minLength: 1
+        earnMile:
+          type: string
+          minLength: 1
+        totalMile:
+          type: string
+          minLength: 1
+        adjustmentMile:
+          type: string
+          minLength: 1
+        adjustmentMileDivision:
+          type: string
+          minLength: 1
+        adjustmentMileValue:
+          type: string
+          minLength: 1
+        storeId:
+          type: string
+          minLength: 1
+        terminalId:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        terminalTranId:
+          type: string
+          minLength: 1
+        terminalTranDateTime:
+          type: string
+          minLength: 1
+        sumDivision:
+          type: string
+          minLength: 1
+        adjustmentDateTime:
+          type: string
+          minLength: 1
+        sumDate:
+          type: string
+          minLength: 1
+        customerRank:
+          type: string
+          minLength: 1
+        customerGroupId:
+          type: string
+          minLength: 1
+        customerGroupId2:
+          type: string
+          minLength: 1
+        customerGroupId3:
+          type: string
+          minLength: 1
+        customerGroupId4:
+          type: string
+          minLength: 1
+        customerGroupId5:
+          type: string
+          minLength: 1
+        staffId:
+          type: string
+          minLength: 1
+        staffName:
+          type: string
+          minLength: 1
+        creditDivision:
+          type: string
+          minLength: 1
+        paymentCount:
+          type: string
+          minLength: 1
+        slipNumber:
+          type: string
+          minLength: 1
+        cancelSlipNumber:
+          type: string
+          minLength: 1
+        authNumber:
+          type: string
+          minLength: 1
+        authDate:
+          type: string
+          minLength: 1
+        cardCompany:
+          type: string
+          minLength: 1
+        denomination:
+          type: string
+          minLength: 1
+        memo:
+          type: string
+          minLength: 1
+        receiptMemo:
+          type: string
+          minLength: 1
+        carriage:
+          type: string
+          minLength: 1
+        commission:
+          type: string
+          minLength: 1
+        guestNumbers:
+          type: string
+          minLength: 1
+        guestNumbersMale:
+          type: string
+          minLength: 1
+        guestNumbersFemale:
+          type: string
+          minLength: 1
+        guestNumbersUnknown:
+          type: string
+          minLength: 1
+        enterDateTime:
+          type: string
+          minLength: 1
+        taxFreeSalesDivision:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxExclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxExclude:
+          type: string
+          minLength: 1
+        tags:
+          type: string
+          minLength: 1
+        pointGivingDivision:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pointSpendDivision:
+          type: string
+          minLength: 1
+        mileageDivision:
+          type: string
+          minLength: 1
+        mileageLabel:
+          type: string
+          minLength: 1
+        customerPinCode:
+          type: string
+          minLength: 1
+        returnSales:
+          $ref: "#/components/schemas/returnSales"
+        disposeDivision:
+          $ref: "#/components/schemas/disposeDivision"
+        disposeServerTransactionHeadId:
+          type: string
+          minLength: 1
+        cancelDateTime:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: string
+          minLength: 1
+        taxRate:
+          type: string
+          minLength: 1
+        taxRounding:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: string
+          minLength: 1
+        transactionUuid:
+          type: string
+          minLength: 1
+        exchangeTicketNo:
+          type: string
+          minLength: 1
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        barcode:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/transactionDetail"
+        depositOthers:
+          type: array
+          items:
+            $ref: "#/components/schemas/depositOthers"
+        coupons:
+          type: array
+          items:
+            $ref: "#/components/schemas/couponsForTransactions"
+        couponItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/couponItemsForTransactions"
+        store:
+          $ref: "#/components/schemas/store"
+        customer:
+          $ref: "#/components/schemas/customer"
+        customerGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/customerGroup"
+        staff:
+          $ref: "#/components/schemas/staff"
+        layaway:
+          $ref: "#/components/schemas/layaway"
+        layawayPickUp:
+          $ref: "#/components/schemas/layawayPickUp"
+      required:
+        - transactionHeadId
+        - transactionHeadDivision
+        - terminalTranDateTime
+        - returnSales
+    getLayawayListItem:
+      description: ""
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        transactionDateTime:
+          type: string
+          minLength: 1
+        transactionHeadDivision:
+          $ref: "#/components/schemas/transactionHeadDivision"
+        cancelDivision:
+          $ref: "#/components/schemas/cancelDivision"
+          minLength: 1
+        unitNonDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitStaffDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitBargainDiscountsubtotal:
+          type: string
+          minLength: 1
+        subtotal:
+          type: string
+          minLength: 1
+        subtotalForDiscount:
+          type: string
+          minLength: 1
+        subtotalDiscountPrice:
+          type: string
+          minLength: 1
+        subtotalDiscountRate:
+          type: string
+          minLength: 1
+        subtotalDiscountDivision:
+          type: string
+          minLength: 1
+        pointDiscount:
+          type: string
+          minLength: 1
+        total:
+          type: string
+          minLength: 1
+        taxInclude:
+          type: string
+          minLength: 1
+        taxExclude:
+          type: string
+          minLength: 1
+        roundingDivision:
+          type: string
+          minLength: 1
+        roundingPrice:
+          type: string
+          minLength: 1
+        cashTotal:
+          type: string
+          minLength: 1
+        creditTotal:
+          type: string
+          minLength: 1
+        deposit:
+          type: string
+          minLength: 1
+        depositCash:
+          type: string
+          minLength: 1
+        depositCredit:
+          type: string
+          minLength: 1
+        change:
+          type: string
+          minLength: 1
+        tipCash:
+          type: string
+          minLength: 1
+        tipCredit:
+          type: string
+          minLength: 1
+        amount:
+          type: string
+          minLength: 1
+        returnAmount:
+          type: string
+          minLength: 1
+        costTotal:
+          type: string
+          minLength: 1
+        salesHeadDivision:
+          type: string
+          minLength: 1
+        inTaxSalesTotal:
+          type: string
+          minLength: 1
+        outTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetInTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetOutTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTaxFreeTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetCostTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetAmount:
+          type: string
+          minLength: 1
+        nonSalesTargetReturnAmount:
+          type: string
+          minLength: 1
+        newPoint:
+          type: string
+          minLength: 1
+        spendPoint:
+          type: string
+          minLength: 1
+        point:
+          type: string
+          minLength: 1
+        totalPoint:
+          type: string
+          minLength: 1
+        currentMile:
+          type: string
+          minLength: 1
+        earnMile:
+          type: string
+          minLength: 1
+        totalMile:
+          type: string
+          minLength: 1
+        adjustmentMile:
+          type: string
+          minLength: 1
+        adjustmentMileDivision:
+          type: string
+          minLength: 1
+        adjustmentMileValue:
+          type: string
+          minLength: 1
+        storeId:
+          type: string
+          minLength: 1
+        storeCode:
+          type: string
+          minLength: 1
+        terminalId:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        customerCode:
+          type: string
+          minLength: 1
+        terminalTranId:
+          type: string
+          minLength: 1
+        terminalTranDateTime:
+          type: string
+          minLength: 1
+        sumDivision:
+          type: string
+          minLength: 1
+        adjustmentDateTime:
+          type: string
+          minLength: 1
+        sumDate:
+          type: string
+          minLength: 1
+        customerRank:
+          type: string
+          minLength: 1
+        customerGroupId:
+          type: string
+          minLength: 1
+        customerGroupId2:
+          type: string
+          minLength: 1
+        customerGroupId3:
+          type: string
+          minLength: 1
+        customerGroupId4:
+          type: string
+          minLength: 1
+        customerGroupId5:
+          type: string
+          minLength: 1
+        staffId:
+          type: string
+          minLength: 1
+        staffCode:
+          type: string
+          minLength: 1
+        staffName:
+          type: string
+          minLength: 1
+        creditDivision:
+          type: string
+          minLength: 1
+        paymentCount:
+          type: string
+          minLength: 1
+        slipNumber:
+          type: string
+          minLength: 1
+        cancelSlipNumber:
+          type: string
+          minLength: 1
+        authNumber:
+          type: string
+          minLength: 1
+        authDate:
+          type: string
+          minLength: 1
+        cardCompany:
+          type: string
+          minLength: 1
+        denomination:
+          type: string
+          minLength: 1
+        memo:
+          type: string
+          minLength: 1
+        receiptMemo:
+          type: string
+          minLength: 1
+        carriage:
+          type: string
+          minLength: 1
+        commission:
+          type: string
+          minLength: 1
+        guestNumbers:
+          type: string
+          minLength: 1
+        guestNumbersMale:
+          type: string
+          minLength: 1
+        guestNumbersFemale:
+          type: string
+          minLength: 1
+        guestNumbersUnknown:
+          type: string
+          minLength: 1
+        enterDateTime:
+          type: string
+          minLength: 1
+        taxFreeSalesDivision:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxExclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxExclude:
+          type: string
+          minLength: 1
+        tags:
+          type: string
+          minLength: 1
+        pointGivingDivision:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pointSpendDivision:
+          type: string
+          minLength: 1
+        mileageDivision:
+          type: string
+          minLength: 1
+        mileageLabel:
+          type: string
+          minLength: 1
+        customerPinCode:
+          type: string
+          minLength: 1
+        returnSales:
+          $ref: "#/components/schemas/returnSales"
+        disposeDivision:
+          $ref: "#/components/schemas/disposeDivision"
+          minLength: 1
+        disposeServerTransactionHeadId:
+          type: string
+          minLength: 1
+        cancelDateTime:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: string
+          minLength: 1
+        taxRate:
+          type: string
+          minLength: 1
+        taxRounding:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: string
+          minLength: 1
+        transactionUuid:
+          type: string
+          minLength: 1
+        exchangeTicketNo:
+          type: string
+          minLength: 1
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        layaway:
+          $ref: "#/components/schemas/layaway"
+        layawayPickUp:
+          $ref: "#/components/schemas/layawayPickUp"
+      required:
+        - transactionHeadId
+        - transactionHeadDivision
+        - subtotal
+        - total
+        - terminalTranDateTime
+        - returnSales
+    getLayawayById:
+      description: ""
+      type: object
+      properties:
+        transactionHeadId:
+          type: string
+          minLength: 1
+        transactionDateTime:
+          type: string
+          minLength: 1
+        transactionHeadDivision:
+          $ref: "#/components/schemas/transactionHeadDivision"
+        cancelDivision:
+          $ref: "#/components/schemas/cancelDivision"
+          minLength: 1
+        unitNonDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitStaffDiscountsubtotal:
+          type: string
+          minLength: 1
+        unitBargainDiscountsubtotal:
+          type: string
+          minLength: 1
+        subtotal:
+          type: string
+          minLength: 1
+        subtotalForDiscount:
+          type: string
+          minLength: 1
+        subtotalDiscountPrice:
+          type: string
+          minLength: 1
+        subtotalDiscountRate:
+          type: string
+          minLength: 1
+        subtotalDiscountDivision:
+          type: string
+          minLength: 1
+        pointDiscount:
+          type: string
+          minLength: 1
+        total:
+          type: string
+          minLength: 1
+        taxInclude:
+          type: string
+          minLength: 1
+        taxExclude:
+          type: string
+          minLength: 1
+        roundingDivision:
+          type: string
+          minLength: 1
+        roundingPrice:
+          type: string
+          minLength: 1
+        cashTotal:
+          type: string
+          minLength: 1
+        creditTotal:
+          type: string
+          minLength: 1
+        deposit:
+          type: string
+          minLength: 1
+        depositCash:
+          type: string
+          minLength: 1
+        depositCredit:
+          type: string
+          minLength: 1
+        change:
+          type: string
+          minLength: 1
+        tipCash:
+          type: string
+          minLength: 1
+        tipCredit:
+          type: string
+          minLength: 1
+        amount:
+          type: string
+          minLength: 1
+        returnAmount:
+          type: string
+          minLength: 1
+        costTotal:
+          type: string
+          minLength: 1
+        salesHeadDivision:
+          type: string
+          minLength: 1
+        inTaxSalesTotal:
+          type: string
+          minLength: 1
+        outTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonTaxSalesTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetInTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetOutTaxTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetTaxFreeTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetCostTotal:
+          type: string
+          minLength: 1
+        nonSalesTargetAmount:
+          type: string
+          minLength: 1
+        nonSalesTargetReturnAmount:
+          type: string
+          minLength: 1
+        newPoint:
+          type: string
+          minLength: 1
+        spendPoint:
+          type: string
+          minLength: 1
+        point:
+          type: string
+          minLength: 1
+        totalPoint:
+          type: string
+          minLength: 1
+        currentMile:
+          type: string
+          minLength: 1
+        earnMile:
+          type: string
+          minLength: 1
+        totalMile:
+          type: string
+          minLength: 1
+        adjustmentMile:
+          type: string
+          minLength: 1
+        adjustmentMileDivision:
+          type: string
+          minLength: 1
+        adjustmentMileValue:
+          type: string
+          minLength: 1
+        storeId:
+          type: string
+          minLength: 1
+        terminalId:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        terminalTranId:
+          type: string
+          minLength: 1
+        terminalTranDateTime:
+          type: string
+          minLength: 1
+        sumDivision:
+          type: string
+          minLength: 1
+        adjustmentDateTime:
+          type: string
+          minLength: 1
+        sumDate:
+          type: string
+          minLength: 1
+        customerRank:
+          type: string
+          minLength: 1
+        customerGroupId:
+          type: string
+          minLength: 1
+        customerGroupId2:
+          type: string
+          minLength: 1
+        customerGroupId3:
+          type: string
+          minLength: 1
+        customerGroupId4:
+          type: string
+          minLength: 1
+        customerGroupId5:
+          type: string
+          minLength: 1
+        staffId:
+          type: string
+          minLength: 1
+        staffName:
+          type: string
+          minLength: 1
+        creditDivision:
+          type: string
+          minLength: 1
+        paymentCount:
+          type: string
+          minLength: 1
+        slipNumber:
+          type: string
+          minLength: 1
+        cancelSlipNumber:
+          type: string
+          minLength: 1
+        authNumber:
+          type: string
+          minLength: 1
+        authDate:
+          type: string
+          minLength: 1
+        cardCompany:
+          type: string
+          minLength: 1
+        denomination:
+          type: string
+          minLength: 1
+        memo:
+          type: string
+          minLength: 1
+        receiptMemo:
+          type: string
+          minLength: 1
+        carriage:
+          type: string
+          minLength: 1
+        commission:
+          type: string
+          minLength: 1
+        guestNumbers:
+          type: string
+          minLength: 1
+        guestNumbersMale:
+          type: string
+          minLength: 1
+        guestNumbersFemale:
+          type: string
+          minLength: 1
+        guestNumbersUnknown: {}
+        enterDateTime:
+          type: string
+          minLength: 1
+        taxFreeSalesDivision:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeGeneralTaxExclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxInclude:
+          type: string
+          minLength: 1
+        netTaxFreeConsumableTaxExclude:
+          type: string
+          minLength: 1
+        tags:
+          type: string
+          minLength: 1
+        pointGivingDivision:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pointSpendDivision:
+          type: string
+          minLength: 1
+        mileageDivision:
+          type: string
+          minLength: 1
+        mileageLabel:
+          type: string
+          minLength: 1
+        customerPinCode:
+          type: string
+          minLength: 1
+        returnSales:
+          $ref: "#/components/schemas/returnSales"
+        disposeDivision:
+          $ref: "#/components/schemas/disposeDivision"
+          minLength: 1
+        disposeServerTransactionHeadId:
+          type: string
+          minLength: 1
+        cancelDateTime:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: string
+          minLength: 1
+        taxRate:
+          type: string
+          minLength: 1
+        taxRounding:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: string
+          minLength: 1
+        transactionUuid:
+          type: string
+          minLength: 1
+        exchangeTicketNo:
+          type: string
+          minLength: 1
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        details:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/transactionDetail"
+        layaway:
+          $ref: "#/components/schemas/layaway"
+        layawayPickUp:
+          $ref: "#/components/schemas/layawayPickUp"
+        store:
+          $ref: "#/components/schemas/store"
+        customer:
+          $ref: "#/components/schemas/customer"
+        customerGroups:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/customerGroup"
+        staff:
+          $ref: "#/components/schemas/staff"
+      required:
+        - transactionHeadId
+        - transactionHeadDivision
+        - subtotal
+        - total
+        - terminalTranDateTime
+        - returnSales
+    transactionHeadDivision:
+      type: string
+      title: transactionHeadDivision
+      description: "取引区分：取引を識別する区分。 （1:通常、2:入金、3:出金、4:預かり金、 5:預かり金返金、6:ポイント加算、7:ポイント減算、8:ポイント失効、9:回数券、10:取置き、11:チップ、13:マイル加算、14:マイル減算、15:バリューカード入金、16:領収証）"
+      enum:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+        - "6"
+        - "7"
+        - "8"
+        - "9"
+        - "10"
+        - "11"
+        - "13"
+        - "14"
+        - "15"
+        - "16"
+      x-enum-varnames:
+        - Normal
+        - MoneyDeposit
+        - MoneyWithdrawal
+        - Deposit
+        - DepositRefund
+        - AddPoints
+        - SubtractPoints
+        - ExpirePoints
+        - Coupon
+        - Hold
+        - Tip
+        - AddMiles
+        - SubtractMiles
+        - ValueCardDeposit
+        - Receipt
+    taxDivision:
+      type: string
+      title: taxDivision
+      description: "商品単価の税区分 (0:税込、1:税抜、2:非課税)"
+      enum:
+        - "0"
+        - "1"
+        - "2"
+      x-enum-varnames:
+        - Include
+        - Exclude
+        - Exempt
+    productDivision:
+      type: string
+      title: productDivision
+      minLength: 1
+      description: "商品区分：(0：通常、1：回数券、2：オプション商品、3：部門販売、4：バンドル(親)、5：セット売(親)、6：簡易セット(親)、7：バンドル商品(子)、8：バンドル値引(子)、A：プラン(子)、B：コース(子))"
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+        - "6"
+        - "7"
+        - "8"
+        - "A"
+        - "B"
+      x-enum-varnames:
+        - Normal
+        - Coupon
+        - Option
+        - Department
+        - ParentBundle
+        - ParentSet
+        - ParentSimpleSet
+        - ChildBundle
+        - ChildDiscount
+        - ChildPlan
+        - ChildCourse
+    transactionDetailDivision:
+      type: string
+      title: transactionDetailDivision
+      enum:
+        - "1"
+        - "2"
+        - "3"
+      x-enum-varnames:
+        - Normal
+        - Refund
+        - SaleByCategory
+      description: 取引明細区分：（1：通常、2：返品、3：部門売り）。
+    salesDivision:
+      type: string
+      title: salesDivision
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Include
+        - Exclude
+      description: "売上区分 (0:売上対象、1:売上対象外)"
+    couponDivision:
+      type: string
+      title: couponDivision
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Normal
+        - Giftee
+      description: |-
+        クーポン区分：クーポン区分（0：通常、1：giftee）
+        ※ 1:giftee は、プレミアムプラスプラン以上でのみ指定可能です。
+    awardType:
+      type: string
+      title: awardType
+      enum:
+        - "1"
+        - "2"
+        - "3"
+      x-enum-varnames:
+        - DiscountByFixed
+        - DiscountByRate
+        - GrantProduct
+      description: 特典タイプ：そのクーポンのタイプ。（1：値引、2：割引、3：商品付与）
+    applyConditionDivision:
+      type: string
+      title: applyConditionDivision
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Always
+        - SpecifiedProductIncluded
+      description: 適用条件区分：クーポンの使用条件のうち、対象商品が含まれている必要があるか指定します。（0：全適用、1：対象商品が含まれる場合のみ適用）
+    postCreateCoupons:
+      description: ""
+      type: object
+      properties:
+        couponName:
+          type: string
+          minLength: 1
+        couponDivision:
+          $ref: "#/components/schemas/couponDivision"
+        serialNumber:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+        awardType:
+          $ref: "#/components/schemas/awardType"
+        awardValue:
+          type: string
+          minLength: 1
+        applyConditionDivision:
+          $ref: "#/components/schemas/applyConditionDivision"
+        minTargetPrice:
+          type: string
+          minLength: 1
+        maxTargetPrice:
+          type: string
+          minLength: 1
+        startDate:
+          type: string
+          minLength: 1
+        endDate:
+          type: string
+          minLength: 1
+      required:
+        - couponName
+        - serialNumber
+        - awardType
+        - awardValue
+        - applyConditionDivision
+    postCreateCouponsResponse:
+      $ref: "#/components/schemas/coupon"
+    getCouponsResponse:
+      type: array
+      description: ""
+      items:
+        $ref: "#/components/schemas/coupon"
+    coupon:
+      description: ""
+      type: object
+      properties:
+        couponId:
+          type: string
+          minLength: 1
+        couponName:
+          type: string
+          minLength: 1
+        couponDivision:
+          $ref: "#/components/schemas/couponDivision"
+        serialNumber:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+        awardType:
+          $ref: "#/components/schemas/awardType"
+        awardValue:
+          type: string
+          minLength: 1
+        applyConditionDivision:
+          $ref: "#/components/schemas/applyConditionDivision"
+        minTargetPrice:
+          type: string
+          minLength: 1
+        maxTargetPrice:
+          type: string
+          minLength: 1
+        startDate:
+          type: string
+          minLength: 1
+        endDate:
+          type: string
+          minLength: 1
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+      required:
+        - couponId
+        - serialNumber
+    disposeDivision:
+      type: string
+      title: disposeDivision
+      description: |
+        打消区分：0：通常、1：打消元レコード、2：打消レコード
+      enum:
+        - "0"
+        - "1"
+        - "2"
+      x-enum-varnames:
+        - Normal
+        - DisposedSourceRecord
+        - DisposeRecord
+    pointUseDivision:
+      type: string
+      title: pointUseDivision
+      description: ポイント機能を使用するか判断 (0：使用しない、1：使用する）
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Disable
+        - Enable
+    cancelDivision:
+      type: string
+      title: cancelDivision
+      description: |
+        取消区分：取引の取消を識別する区分。 (0:通常、1：取消）
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Normal
+        - Cancel
+    returnSales:
+      type: string
+      title: returnSales
+      description: |
+        返品取引区分：(0:通常、1:返品販売)
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Normal
+        - ReturnSales
+    getStoresResponse:
+      type: array
+      description: ""
+      minItems: 1
+      uniqueItems: true
+      x-examples: {}
+      items:
+        $ref: "#/components/schemas/getStoresResponseItem"
+    getStoresResponseItem:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        storeId:
+          type: string
+          minLength: 1
+        storeCode:
+          type: string
+          minLength: 1
+        storeName:
+          type: string
+          minLength: 1
+        storeAbbr:
+          type: string
+          minLength: 1
+        printReceiptStoreName:
+          type: string
+          minLength: 1
+        printStockReceiptStoreName:
+          type: string
+          minLength: 1
+        division:
+          minLength: 1
+          $ref: "#/components/schemas/storeDivision"
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        homepage:
+          type: string
+          minLength: 1
+        tempTranMailAddress:
+          type: string
+          minLength: 1
+        priceChangeFlag:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: string
+          minLength: 1
+        sumProcDivision:
+          type: string
+          minLength: 1
+        sumDateChangeTime:
+          type: string
+          minLength: 1
+        sumRefColumn:
+          type: string
+          minLength: 1
+        pointNotApplicable:
+          type: string
+          minLength: 1
+        taxFreeDivision:
+          type: string
+          minLength: 1
+        maxBundleProductCount:
+          type: string
+          minLength: 1
+        maxDiscountRate:
+          type: string
+          minLength: 1
+        carriageDisplayFlag:
+          type: string
+          minLength: 1
+        terminalAdjustmentCashFlag:
+          type: string
+          minLength: 1
+        terminalCheckCashFlag:
+          type: string
+          minLength: 1
+        waiterAdjustmentDivision:
+          type: string
+          minLength: 1
+        savingAutoDivision:
+          type: string
+          minLength: 1
+        savingAutoPrice:
+          type: string
+          minLength: 1
+        cancelSettingDivision:
+          type: string
+          minLength: 1
+        roundingDivision:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: string
+          minLength: 1
+        cardCompanySelectDivision:
+          type: string
+          minLength: 1
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        taxLabelNormal:
+          type: string
+          minLength: 1
+        taxLabelReduce:
+          type: string
+          minLength: 1
+        pauseFlag:
+          type: string
+          minLength: 1
+        displaySequence:
+          type: string
+          minLength: 1
+        facePaymentUseDivision:
+          type: string
+          minLength: 1
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        pointCondition:
+          $ref: "#/components/schemas/pointCondition"
+        receiptPrintInfo:
+          type: object
+          properties:
+            storeId:
+              type: string
+              minLength: 1
+            header:
+              type: string
+              minLength: 1
+            footer:
+              type: string
+              minLength: 1
+            receiptTaxOfficeStampComment:
+              type: string
+              minLength: 1
+            taxOfficeName:
+              type: string
+              minLength: 1
+            airPrintLogo:
+              type: string
+              minLength: 1
+            advertisementImage:
+              type: string
+              minLength: 1
+            giftReceiptImage:
+              type: string
+              minLength: 1
+            giftReceiptNote:
+              type: string
+              minLength: 1
+            discountReceiptHeader:
+              type: string
+              minLength: 1
+            discountReceiptFooter:
+              type: string
+              minLength: 1
+      required:
+        - storeId
+        - storeCode
+        - storeName
+        - division
+    storeDivision:
+      type: string
+      title: storeDivision
+      enum:
+        - "1"
+        - "2"
+      description: 店舗区分：店舗区分。（1：通常店舗、2：倉庫）
+      x-enum-varnames:
+        - Normal
+        - Warehouse
+    updateCustomerPointRequest:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        mile:
+          type: string
+          minLength: 1
+          description: マイル
+        point:
+          type: string
+          minLength: 1
+          description: ポイント
+        pointExpireDate:
+          type: string
+          minLength: 1
+          description: ポイント失効予定日：指定しない場合ポイント失効日は更新されません。
+    updateCustomerPointResponse:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        customerId:
+          type: string
+          minLength: 1
+          description: 会員ID
+        mile:
+          type: string
+          minLength: 1
+          description: マイル
+        point:
+          type: string
+          minLength: 1
+          description: ポイント
+        pointExpireDate:
+          type: string
+          minLength: 1
+          description: ポイント失効予定日：会員必須項目設定で必須項目に設定されている場合必須
+        updDateTime:
+          type: string
+          minLength: 1
+          description: "更新日時：登録時・更新時の日時。[YYYY-MM-DDThh:mm:ssTZD]"
+    getCustomerPointListItem:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        customerId:
+          type: string
+          minLength: 1
+        mile:
+          type: string
+          minLength: 1
+        point:
+          type: string
+          minLength: 1
+        pointExpireDate:
+          type: string
+          minLength: 1
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+      required:
+        - customerId
+        - insDateTime
+        - updDateTime
+    updateStoreRequest:
+      description: ""
+      type: object
+      properties:
+        storeCode:
+          type: string
+          minLength: 1
+        storeName:
+          type: string
+          minLength: 1
+        storeAbbr:
+          type: string
+          minLength: 1
+        printReceiptStoreName:
+          type: string
+          minLength: 1
+        printStockReceiptStoreName:
+          type: string
+          minLength: 1
+        division:
+          $ref: "#/components/schemas/storeDivision"
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        homepage:
+          type: string
+          minLength: 1
+        tempTranMailAddress:
+          type: string
+          minLength: 1
+        priceChangeFlag:
+          type: number
+        sellDivision:
+          type: number
+        sumProcDivision:
+          type: number
+        sumDateChangeTime:
+          type: string
+          minLength: 1
+        sumRefColumn:
+          type: number
+        pointNotApplicable:
+          type: number
+        taxFreeDivision:
+          type: number
+        maxBundleProductCount:
+          type: number
+        maxDiscountRate:
+          type: string
+          minLength: 1
+        carriageDisplayFlag:
+          type: number
+        terminalAdjustmentCashFlag:
+          type: number
+        terminalCheckCashFlag:
+          type: number
+        waiterAdjustmentDivision:
+          type: number
+        savingAutoDivision:
+          type: number
+        savingAutoPrice:
+          type: string
+          minLength: 1
+        cancelSettingDivision:
+          type: number
+        roundingDivision:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: number
+        cardCompanySelectDivision:
+          type: number
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        taxLabelNormal:
+          type: string
+          minLength: 1
+        taxLabelReduce:
+          type: string
+          minLength: 1
+        displaySequence:
+          type: string
+          minLength: 1
+        facePaymentUseDivision:
+          type: number
+        pointCondition:
+          $ref: "#/components/schemas/pointCondition"
+        receiptPrintInfo:
+          type: object
+          properties:
+            header:
+              type: string
+              minLength: 1
+            footer:
+              type: string
+              minLength: 1
+            receiptTaxOfficeStampComment:
+              type: string
+              minLength: 1
+            taxOfficeName:
+              type: string
+              minLength: 1
+            discountReceiptHeader:
+              type: string
+              minLength: 1
+            discountReceiptFooter:
+              type: string
+              minLength: 1
+    pointSpendDivision:
+      type: string
+      title: pointSpendDivision
+      description: 1：外税を含む合計からポイント利用分を差し引く 2：外税を含まない合計からポイント利用分を差し引く ポイント機能を使用しない場合は1
+      enum:
+        - "1"
+        - "2"
+      x-enum-varnames:
+        - FromTaxIncluded
+        - FromTaxExcluded
+    pointSpendLimitDivision:
+      type: string
+      title: pointSpendLimitDivision
+      description: "ポイント利用時にどこまで利用可能かを識別する区分 0: 保有ポイントまで利用可能 1: 値引き対象額以下で最小のポイントまで利用可能 2: 値引き対象額以上で最小のポイントまで利用可能 ポイント機能を使用しない場合は0 例）100ポイント単位利用可。300ポイント保有する会員が150円の会計を行った場合 0: 300ポイントまで利用可能 1: 100ポイントまで利用可能 2: 200ポイントまで利用可能"
+      enum:
+        - "0"
+        - "1"
+        - "2"
+      x-enum-varnames:
+        - UpToPoints
+        - BelowPointUseUnit
+        - AbovePointUseUnit
+    expireDivision:
+      type: string
+      title: expireDivision
+      description: ポイント失効期限の単位を設定 (0：なし、1：日、2：月、3：年) ポイント機能を使用しない場合は0 ポイント失効期限を指定する場合、0(なし)を指定するとエラー
+      enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+      x-enum-varnames:
+        - NotExpired
+        - ExpiredByDay
+        - ExpiredByMonth
+        - ExpiredByYear
+    mileageDivision:
+      type: string
+      title: mileageDivision
+      description: "マイレージ機能を利用するか否か (0: 利用しない, 1: 利用する, 2: ポイントの代わりに貯める) ポイント機能を使用しない場合は0"
+      enum:
+        - "0"
+        - "1"
+        - "2"
+      x-enum-varnames:
+        - Disable
+        - Enable
+        - AlternateByPoint
+    pointGivingDivision:
+      type: string
+      title: pointGivingDivision
+      description: （1：税額を含める + 利用ポイント分を含める、 　2：税額を含めない + 利用ポイント分を含める、 　3：税額を含める + 利用ポイント分を含めない、 　4：税額を含めない + 利用ポイント分を含めない） ポイント機能を使用しない場合は1 ※ポイント使用区分が1の場合、必須。
+      enum:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+      x-enum-varnames:
+        - TaxIncludePointInclude
+        - TaxNotIncludePointInclude
+        - TaxIncludePointNotInclude
+        - TaxNotIncludePointNotInclude
+    pointCondition:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        storeId:
+          type: string
+          minLength: 1
+        pointUseDivision:
+          $ref: "#/components/schemas/pointUseDivision"
+        spendRate:
+          type: string
+          minLength: 1
+        pointGivingUnitPrice:
+          type: string
+          minLength: 1
+        pointGivingUnit:
+          type: string
+          minLength: 1
+        pointGivingDivision:
+          $ref: "#/components/schemas/pointGivingDivision"
+        pointUseUnit:
+          type: string
+          minLength: 1
+        pointSpendDivision:
+          $ref: "#/components/schemas/pointSpendDivision"
+        pointSpendLimitDivision:
+          $ref: "#/components/schemas/pointSpendLimitDivision"
+        expireDivision:
+          $ref: "#/components/schemas/expireDivision"
+        expireLimit:
+          type: string
+          minLength: 1
+        mileageDivision:
+          $ref: "#/components/schemas/mileageDivision"
+    updateStoreResponse:
+      description: ""
+      type: object
+      x-examples:
+        example-1:
+          storeId: string
+          storeCode: string
+          storeName: string
+          storeAbbr: string
+          printReceiptStoreName: string
+          printStockReceiptStoreName: string
+          division: 1
+          postCode: string
+          address: string
+          phoneNumber: string
+          faxNumber: string
+          mailAddress: string
+          homepage: string
+          tempTranMailAddress: string
+          priceChangeFlag: string
+          sellDivision: 0
+          sumProcDivision: 0
+          sumDateChangeTime: string
+          sumRefColumn: 0
+          pointNotApplicable: 0
+          taxFreeDivision: 0
+          maxBundleProductCount: string
+          maxDiscountRate: string
+          carriageDisplayFlag: 0
+          terminalAdjustmentCashFlag: 0
+          terminalCheckCashFlag: 0
+          waiterAdjustmentDivision: 0
+          savingAutoDivision: 0
+          savingAutoPrice: string
+          cancelSettingDivision: 1
+          roundingDivision: "00"
+          discountRoundingDivision: 0
+          cardCompanySelectDivision: 0
+          giftReceiptValidDays: string
+          taxLabelNormal: string
+          taxLabelReduce: string
+          displaySequence: string
+          facePaymentUseDivision: string
+          insDateTime: string
+          updDateTime: string
+          pointCondition:
+            storeId: string
+            pointUseDivision: 0
+            spendRate: string
+            pointGivingUnitPrice: null
+            pointGivingUnit: null
+            pointGivingDivision: 1
+            pointUseUnit: null
+            pointSpendDivision: 1
+            pointSpendLimitDivision: 0
+            expireDivision: 0
+            expireLimit: null
+            mileageDivision: 0
+            mileageLimit: null
+          receiptPrintInfo:
+            storeId: string
+            header: string
+            footer: string
+            receiptTaxOfficeStampComment: string
+            airPrintLogo: string
+            advertisementImage: string
+            giftReceiptImage: string
+            giftReceiptNote: string
+            taxOfficeName: string
+            discountReceiptHeader: string
+            discountReceiptFooter: string
+      properties:
+        storeId:
+          type: string
+          minLength: 1
+        storeCode:
+          type: string
+          minLength: 1
+        storeName:
+          type: string
+          minLength: 1
+        storeAbbr:
+          type: string
+          minLength: 1
+        printReceiptStoreName:
+          type: string
+          minLength: 1
+        printStockReceiptStoreName:
+          type: string
+          minLength: 1
+        division:
+          $ref: "#/components/schemas/storeDivision"
+        postCode:
+          type: string
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phoneNumber:
+          type: string
+          minLength: 1
+        faxNumber:
+          type: string
+          minLength: 1
+        mailAddress:
+          type: string
+          minLength: 1
+        homepage:
+          type: string
+          minLength: 1
+        tempTranMailAddress:
+          type: string
+          minLength: 1
+        priceChangeFlag:
+          type: string
+          minLength: 1
+        sellDivision:
+          type: number
+        sumProcDivision:
+          type: number
+        sumDateChangeTime:
+          type: string
+          minLength: 1
+        sumRefColumn:
+          type: number
+        pointNotApplicable:
+          type: number
+        taxFreeDivision:
+          type: number
+        maxBundleProductCount:
+          type: string
+          minLength: 1
+        maxDiscountRate:
+          type: string
+          minLength: 1
+        carriageDisplayFlag:
+          type: number
+        terminalAdjustmentCashFlag:
+          type: number
+        terminalCheckCashFlag:
+          type: number
+        waiterAdjustmentDivision:
+          type: number
+        savingAutoDivision:
+          type: number
+        savingAutoPrice:
+          type: string
+          minLength: 1
+        cancelSettingDivision:
+          type: number
+        roundingDivision:
+          type: string
+          minLength: 1
+        discountRoundingDivision:
+          type: number
+        cardCompanySelectDivision:
+          type: number
+        giftReceiptValidDays:
+          type: string
+          minLength: 1
+        taxLabelNormal:
+          type: string
+          minLength: 1
+        taxLabelReduce:
+          type: string
+          minLength: 1
+        displaySequence:
+          type: string
+          minLength: 1
+        facePaymentUseDivision:
+          type: string
+          minLength: 1
+        insDateTime:
+          type: string
+          minLength: 1
+        updDateTime:
+          type: string
+          minLength: 1
+        pointCondition:
+          $ref: "#/components/schemas/pointCondition"
+        receiptPrintInfo:
+          type: object
+          properties:
+            storeId:
+              type: string
+              minLength: 1
+            header:
+              type: string
+              minLength: 1
+            footer:
+              type: string
+              minLength: 1
+            receiptTaxOfficeStampComment:
+              type: string
+              minLength: 1
+            airPrintLogo:
+              type: string
+              minLength: 1
+            advertisementImage:
+              type: string
+              minLength: 1
+            giftReceiptImage:
+              type: string
+              minLength: 1
+            giftReceiptNote:
+              type: string
+              minLength: 1
+            taxOfficeName:
+              type: string
+              minLength: 1
+            discountReceiptHeader:
+              type: string
+              minLength: 1
+            discountReceiptFooter:
+              type: string
+              minLength: 1
+      required:
+        - storeId
+        - division
+    sort:
+      type: string
+      title: sort
+      description: "パラメータ名指定 カンマ区切り複数指定可、並び替え順指定「パラメータ名:desc」での指定が可能"
+      enum:
+        - "productCode:desc"
+        - "productCode:asc"
+        - "transactionDateTime:desc"
+        - "transactionDateTime:asc"
+  responses:
+    getCustomerPointListResponse:
+      description: ""
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/getCustomerPointListItem"
