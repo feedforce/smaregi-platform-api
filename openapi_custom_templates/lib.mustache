@@ -1,0 +1,25 @@
+{{! NOTE: https://github.com/OpenAPITools/openapi-generator/tree/v5.1.0/modules/openapi-generator/src/main/resources/rust }}
+
+#![allow(warnings)]
+#![allow(clippy::all)]
+#![allow(unknown_lints)]
+
+#[macro_use]
+extern crate serde_derive;
+
+#[macro_use]
+extern crate log;
+
+extern crate serde;
+extern crate serde_json;
+extern crate url;
+{{#hyper}}
+extern crate hyper;
+extern crate futures;
+{{/hyper}}
+{{#reqwest}}
+extern crate reqwest;
+{{/reqwest}}
+
+pub mod apis;
+pub mod models;
