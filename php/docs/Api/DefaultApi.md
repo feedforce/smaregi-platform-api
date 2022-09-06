@@ -6,8 +6,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createCustomers()**](DefaultApi.md#createCustomers) | **POST** /{contract_id}/pos/customers | 会員情報を登録します。
 [**deleteCoupons()**](DefaultApi.md#deleteCoupons) | **DELETE** /{contract_id}/pos/coupons/{coupon_id} | 
+[**deleteCustomers()**](DefaultApi.md#deleteCustomers) | **DELETE** /{contract_id}/pos/customers/{customer_id} | 会員情報を削除します。
 [**getCoupons()**](DefaultApi.md#getCoupons) | **GET** /{contract_id}/pos/coupons | Your GET endpoint
 [**getCustomerPointList()**](DefaultApi.md#getCustomerPointList) | **GET** /{contract_id}/pos/customers/point | 会員ポイント一覧取得
+[**getCustomerRequiredColumnSetting()**](DefaultApi.md#getCustomerRequiredColumnSetting) | **GET** /{contract_id}/pos/customer_required_column_setting | 会員必須項目設定取得
 [**getCustomers()**](DefaultApi.md#getCustomers) | **GET** /{contract_id}/pos/customers | 会員情報一覧を取得します。
 [**getLayawayById()**](DefaultApi.md#getLayawayById) | **GET** /{contract_id}/pos/transactions/layaways/{layaway_id} | Your GET endpoint
 [**getLayawayList()**](DefaultApi.md#getLayawayList) | **GET** /{contract_id}/pos/transactions/layaways | 取置き一覧を取得します。
@@ -19,6 +21,7 @@ Method | HTTP request | Description
 [**updateCustomerPointRelative()**](DefaultApi.md#updateCustomerPointRelative) | **POST** /{contract_id}/pos/customers/{customer_id}/point/add | 
 [**updateCustomers()**](DefaultApi.md#updateCustomers) | **PATCH** /{contract_id}/pos/customers/{customer_id} | 
 [**updateStore()**](DefaultApi.md#updateStore) | **PATCH** /{contract_id}/pos/stores/{store_id} | 店舗更新
+[**updateTransactionForCustomer()**](DefaultApi.md#updateTransactionForCustomer) | **PATCH** /{contract_id}/pos/transactions/{transaction_id}/customer | 取引会員更新
 
 
 ## `createCustomers()`
@@ -124,6 +127,65 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **contract_id** | **string**| 契約id |
  **coupon_id** | **string**| クーポンid |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[AccessToken](../../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `deleteCustomers()`
+
+```php
+deleteCustomers($contract_id, $customer_id)
+```
+
+会員情報を削除します。
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: AccessToken
+$config = OpenAPI\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new OpenAPI\Client\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$contract_id = 'contract_id_example'; // string | 契約id
+$customer_id = 'customer_id_example'; // string | 顧客id
+
+try {
+    $apiInstance->deleteCustomers($contract_id, $customer_id);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->deleteCustomers: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contract_id** | **string**| 契約id |
+ **customer_id** | **string**| 顧客id |
 
 ### Return type
 
@@ -254,6 +316,64 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**\OpenAPI\Client\Model\GetCustomerPointListItem[]**](../Model/GetCustomerPointListItem.md)
+
+### Authorization
+
+[AccessToken](../../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `getCustomerRequiredColumnSetting()`
+
+```php
+getCustomerRequiredColumnSetting($contract_id): \OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]
+```
+
+会員必須項目設定取得
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: AccessToken
+$config = OpenAPI\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new OpenAPI\Client\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$contract_id = 'contract_id_example'; // string | 契約id
+
+try {
+    $result = $apiInstance->getCustomerRequiredColumnSetting($contract_id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->getCustomerRequiredColumnSetting: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contract_id** | **string**| 契約id |
+
+### Return type
+
+[**\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]**](../Model/GetCustomerRequiredColumnSettingResponse.md)
 
 ### Authorization
 
@@ -527,7 +647,7 @@ Name | Type | Description  | Notes
 ## `getTransaction()`
 
 ```php
-getTransaction($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to): \OpenAPI\Client\Model\GetTransactionItem[]
+getTransaction($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from): \OpenAPI\Client\Model\GetTransactionItem[]
 ```
 
 取引情報一覧を取得します。
@@ -561,9 +681,12 @@ $transaction_head_division = new \OpenAPI\Client\Model\\OpenAPI\Client\Model\Tra
 $sort = new \OpenAPI\Client\Model\\OpenAPI\Client\Model\Sort(); // \OpenAPI\Client\Model\Sort
 $terminal_tran_date_time_from = 'terminal_tran_date_time_from_example'; // string | 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
 $terminal_tran_date_time_to = 'terminal_tran_date_time_to_example'; // string | 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
+$store_id = 56; // int | 店舗ID
+$transaction_head_id_to = 'transaction_head_id_to_example'; // string | 取引ID(To)
+$transaction_head_id_from = 'transaction_head_id_from_example'; // string | 取引ID(From)
 
 try {
-    $result = $apiInstance->getTransaction($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to);
+    $result = $apiInstance->getTransaction($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->getTransaction: ', $e->getMessage(), PHP_EOL;
@@ -586,6 +709,9 @@ Name | Type | Description  | Notes
  **sort** | [**\OpenAPI\Client\Model\Sort**](../Model/.md)|  | [optional]
  **terminal_tran_date_time_from** | **string**| 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] | [optional]
  **terminal_tran_date_time_to** | **string**| 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] | [optional]
+ **store_id** | **int**| 店舗ID | [optional]
+ **transaction_head_id_to** | **string**| 取引ID(To) | [optional]
+ **transaction_head_id_from** | **string**| 取引ID(From) | [optional]
 
 ### Return type
 
@@ -974,6 +1100,70 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**\OpenAPI\Client\Model\UpdateStoreResponse**](../Model/UpdateStoreResponse.md)
+
+### Authorization
+
+[AccessToken](../../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+[[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
+[[Back to Model list]](../../README.md#models)
+[[Back to README]](../../README.md)
+
+## `updateTransactionForCustomer()`
+
+```php
+updateTransactionForCustomer($contract_id, $transaction_id, $update_transaction_for_customer_request): \OpenAPI\Client\Model\GetTransactionId
+```
+
+取引会員更新
+
+取引の会員情報を更新します。
+
+### Example
+
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+
+// Configure Bearer authorization: AccessToken
+$config = OpenAPI\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+
+$apiInstance = new OpenAPI\Client\Api\DefaultApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
+$contract_id = 'contract_id_example'; // string | 契約id
+$transaction_id = 'transaction_id_example'; // string | 取引id
+$update_transaction_for_customer_request = new \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest(); // \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest
+
+try {
+    $result = $apiInstance->updateTransactionForCustomer($contract_id, $transaction_id, $update_transaction_for_customer_request);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->updateTransactionForCustomer: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contract_id** | **string**| 契約id |
+ **transaction_id** | **string**| 取引id |
+ **update_transaction_for_customer_request** | [**\OpenAPI\Client\Model\UpdateTransactionForCustomerRequest**](../Model/UpdateTransactionForCustomerRequest.md)|  | [optional]
+
+### Return type
+
+[**\OpenAPI\Client\Model\GetTransactionId**](../Model/GetTransactionId.md)
 
 ### Authorization
 

@@ -648,6 +648,248 @@ class DefaultApi
     }
 
     /**
+     * Operation deleteCustomers
+     *
+     * 会員情報を削除します。
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $customer_id 顧客id (required)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function deleteCustomers($contract_id, $customer_id)
+    {
+        $this->deleteCustomersWithHttpInfo($contract_id, $customer_id);
+    }
+
+    /**
+     * Operation deleteCustomersWithHttpInfo
+     *
+     * 会員情報を削除します。
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $customer_id 顧客id (required)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function deleteCustomersWithHttpInfo($contract_id, $customer_id)
+    {
+        $request = $this->deleteCustomersRequest($contract_id, $customer_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return [null, $statusCode, $response->getHeaders()];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation deleteCustomersAsync
+     *
+     * 会員情報を削除します。
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $customer_id 顧客id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function deleteCustomersAsync($contract_id, $customer_id)
+    {
+        return $this->deleteCustomersAsyncWithHttpInfo($contract_id, $customer_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation deleteCustomersAsyncWithHttpInfo
+     *
+     * 会員情報を削除します。
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $customer_id 顧客id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function deleteCustomersAsyncWithHttpInfo($contract_id, $customer_id)
+    {
+        $returnType = '';
+        $request = $this->deleteCustomersRequest($contract_id, $customer_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'deleteCustomers'
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $customer_id 顧客id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function deleteCustomersRequest($contract_id, $customer_id)
+    {
+        // verify the required parameter 'contract_id' is set
+        if ($contract_id === null || (is_array($contract_id) && count($contract_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $contract_id when calling deleteCustomers'
+            );
+        }
+        // verify the required parameter 'customer_id' is set
+        if ($customer_id === null || (is_array($customer_id) && count($customer_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $customer_id when calling deleteCustomers'
+            );
+        }
+
+        $resourcePath = '/{contract_id}/pos/customers/{customer_id}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($contract_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'contract_id' . '}',
+                ObjectSerializer::toPathValue($contract_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($customer_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'customer_id' . '}',
+                ObjectSerializer::toPathValue($customer_id),
+                $resourcePath
+            );
+        }
+
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                []
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                [],
+                []
+            );
+        }
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if ($this->config->getAccessToken() !== null) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'DELETE',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getCoupons
      *
      * Your GET endpoint
@@ -1158,6 +1400,274 @@ class DefaultApi
                 $queryParams['customer_id'] = $customer_id;
             }
         }
+
+
+        // path params
+        if ($contract_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'contract_id' . '}',
+                ObjectSerializer::toPathValue($contract_id),
+                $resourcePath
+            );
+        }
+
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                []
+            );
+        }
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if ($this->config->getAccessToken() !== null) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getCustomerRequiredColumnSetting
+     *
+     * 会員必須項目設定取得
+     *
+     * @param  string $contract_id 契約id (required)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]
+     */
+    public function getCustomerRequiredColumnSetting($contract_id)
+    {
+        list($response) = $this->getCustomerRequiredColumnSettingWithHttpInfo($contract_id);
+        return $response;
+    }
+
+    /**
+     * Operation getCustomerRequiredColumnSettingWithHttpInfo
+     *
+     * 会員必須項目設定取得
+     *
+     * @param  string $contract_id 契約id (required)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getCustomerRequiredColumnSettingWithHttpInfo($contract_id)
+    {
+        $request = $this->getCustomerRequiredColumnSettingRequest($contract_id);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getCustomerRequiredColumnSettingAsync
+     *
+     * 会員必須項目設定取得
+     *
+     * @param  string $contract_id 契約id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getCustomerRequiredColumnSettingAsync($contract_id)
+    {
+        return $this->getCustomerRequiredColumnSettingAsyncWithHttpInfo($contract_id)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getCustomerRequiredColumnSettingAsyncWithHttpInfo
+     *
+     * 会員必須項目設定取得
+     *
+     * @param  string $contract_id 契約id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getCustomerRequiredColumnSettingAsyncWithHttpInfo($contract_id)
+    {
+        $returnType = '\OpenAPI\Client\Model\GetCustomerRequiredColumnSettingResponse[]';
+        $request = $this->getCustomerRequiredColumnSettingRequest($contract_id);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getCustomerRequiredColumnSetting'
+     *
+     * @param  string $contract_id 契約id (required)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getCustomerRequiredColumnSettingRequest($contract_id)
+    {
+        // verify the required parameter 'contract_id' is set
+        if ($contract_id === null || (is_array($contract_id) && count($contract_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $contract_id when calling getCustomerRequiredColumnSetting'
+            );
+        }
+
+        $resourcePath = '/{contract_id}/pos/customer_required_column_setting';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
 
 
         // path params
@@ -2519,14 +3029,17 @@ class DefaultApi
      * @param  \OpenAPI\Client\Model\Sort $sort sort (optional)
      * @param  string $terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
      * @param  string $terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
+     * @param  int $store_id 店舗ID (optional)
+     * @param  string $transaction_head_id_to 取引ID(To) (optional)
+     * @param  string $transaction_head_id_from 取引ID(From) (optional)
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\GetTransactionItem[]
      */
-    public function getTransaction($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null)
+    public function getTransaction($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null, $store_id = null, $transaction_head_id_to = null, $transaction_head_id_from = null)
     {
-        list($response) = $this->getTransactionWithHttpInfo($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to);
+        list($response) = $this->getTransactionWithHttpInfo($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from);
         return $response;
     }
 
@@ -2547,14 +3060,17 @@ class DefaultApi
      * @param  \OpenAPI\Client\Model\Sort $sort (optional)
      * @param  string $terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
      * @param  string $terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
+     * @param  int $store_id 店舗ID (optional)
+     * @param  string $transaction_head_id_to 取引ID(To) (optional)
+     * @param  string $transaction_head_id_from 取引ID(From) (optional)
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\GetTransactionItem[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getTransactionWithHttpInfo($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null)
+    public function getTransactionWithHttpInfo($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null, $store_id = null, $transaction_head_id_to = null, $transaction_head_id_from = null)
     {
-        $request = $this->getTransactionRequest($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to);
+        $request = $this->getTransactionRequest($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2644,13 +3160,16 @@ class DefaultApi
      * @param  \OpenAPI\Client\Model\Sort $sort (optional)
      * @param  string $terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
      * @param  string $terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
+     * @param  int $store_id 店舗ID (optional)
+     * @param  string $transaction_head_id_to 取引ID(To) (optional)
+     * @param  string $transaction_head_id_from 取引ID(From) (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionAsync($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null)
+    public function getTransactionAsync($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null, $store_id = null, $transaction_head_id_to = null, $transaction_head_id_from = null)
     {
-        return $this->getTransactionAsyncWithHttpInfo($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to)
+        return $this->getTransactionAsyncWithHttpInfo($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2675,14 +3194,17 @@ class DefaultApi
      * @param  \OpenAPI\Client\Model\Sort $sort (optional)
      * @param  string $terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
      * @param  string $terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
+     * @param  int $store_id 店舗ID (optional)
+     * @param  string $transaction_head_id_to 取引ID(To) (optional)
+     * @param  string $transaction_head_id_from 取引ID(From) (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionAsyncWithHttpInfo($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null)
+    public function getTransactionAsyncWithHttpInfo($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null, $store_id = null, $transaction_head_id_to = null, $transaction_head_id_from = null)
     {
         $returnType = '\OpenAPI\Client\Model\GetTransactionItem[]';
-        $request = $this->getTransactionRequest($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to);
+        $request = $this->getTransactionRequest($contract_id, $sum_date, $with_layaway, $limit, $page, $upd_date_time_to, $upd_date_time_from, $customer_code, $transaction_head_division, $sort, $terminal_tran_date_time_from, $terminal_tran_date_time_to, $store_id, $transaction_head_id_to, $transaction_head_id_from);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2732,11 +3254,14 @@ class DefaultApi
      * @param  \OpenAPI\Client\Model\Sort $sort (optional)
      * @param  string $terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
      * @param  string $terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] (optional)
+     * @param  int $store_id 店舗ID (optional)
+     * @param  string $transaction_head_id_to 取引ID(To) (optional)
+     * @param  string $transaction_head_id_from 取引ID(From) (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getTransactionRequest($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null)
+    public function getTransactionRequest($contract_id, $sum_date = null, $with_layaway = null, $limit = null, $page = null, $upd_date_time_to = null, $upd_date_time_from = null, $customer_code = null, $transaction_head_division = null, $sort = null, $terminal_tran_date_time_from = null, $terminal_tran_date_time_to = null, $store_id = null, $transaction_head_id_to = null, $transaction_head_id_from = null)
     {
         // verify the required parameter 'contract_id' is set
         if ($contract_id === null || (is_array($contract_id) && count($contract_id) === 0)) {
@@ -2871,6 +3396,39 @@ class DefaultApi
             }
             else {
                 $queryParams['terminal_tran_date_time-to'] = $terminal_tran_date_time_to;
+            }
+        }
+        // query params
+        if ($store_id !== null) {
+            if('form' === 'form' && is_array($store_id)) {
+                foreach($store_id as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            }
+            else {
+                $queryParams['store_id'] = $store_id;
+            }
+        }
+        // query params
+        if ($transaction_head_id_to !== null) {
+            if('form' === 'form' && is_array($transaction_head_id_to)) {
+                foreach($transaction_head_id_to as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            }
+            else {
+                $queryParams['transaction_head_id-to'] = $transaction_head_id_to;
+            }
+        }
+        // query params
+        if ($transaction_head_id_from !== null) {
+            if('form' === 'form' && is_array($transaction_head_id_from)) {
+                foreach($transaction_head_id_from as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            }
+            else {
+                $queryParams['transaction_head_id-from'] = $transaction_head_id_from;
             }
         }
 
@@ -4840,6 +5398,304 @@ class DefaultApi
                 $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($update_store_request));
             } else {
                 $httpBody = $update_store_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if ($this->config->getAccessToken() !== null) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        return new Request(
+            'PATCH',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateTransactionForCustomer
+     *
+     * 取引会員更新
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $transaction_id 取引id (required)
+     * @param  \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest $update_transaction_for_customer_request update_transaction_for_customer_request (optional)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\GetTransactionId
+     */
+    public function updateTransactionForCustomer($contract_id, $transaction_id, $update_transaction_for_customer_request = null)
+    {
+        list($response) = $this->updateTransactionForCustomerWithHttpInfo($contract_id, $transaction_id, $update_transaction_for_customer_request);
+        return $response;
+    }
+
+    /**
+     * Operation updateTransactionForCustomerWithHttpInfo
+     *
+     * 取引会員更新
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $transaction_id 取引id (required)
+     * @param  \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest $update_transaction_for_customer_request (optional)
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\GetTransactionId, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateTransactionForCustomerWithHttpInfo($contract_id, $transaction_id, $update_transaction_for_customer_request = null)
+    {
+        $request = $this->updateTransactionForCustomerRequest($contract_id, $transaction_id, $update_transaction_for_customer_request);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\GetTransactionId' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\GetTransactionId', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\GetTransactionId';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\GetTransactionId',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateTransactionForCustomerAsync
+     *
+     * 取引会員更新
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $transaction_id 取引id (required)
+     * @param  \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest $update_transaction_for_customer_request (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function updateTransactionForCustomerAsync($contract_id, $transaction_id, $update_transaction_for_customer_request = null)
+    {
+        return $this->updateTransactionForCustomerAsyncWithHttpInfo($contract_id, $transaction_id, $update_transaction_for_customer_request)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateTransactionForCustomerAsyncWithHttpInfo
+     *
+     * 取引会員更新
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $transaction_id 取引id (required)
+     * @param  \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest $update_transaction_for_customer_request (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function updateTransactionForCustomerAsyncWithHttpInfo($contract_id, $transaction_id, $update_transaction_for_customer_request = null)
+    {
+        $returnType = '\OpenAPI\Client\Model\GetTransactionId';
+        $request = $this->updateTransactionForCustomerRequest($contract_id, $transaction_id, $update_transaction_for_customer_request);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateTransactionForCustomer'
+     *
+     * @param  string $contract_id 契約id (required)
+     * @param  string $transaction_id 取引id (required)
+     * @param  \OpenAPI\Client\Model\UpdateTransactionForCustomerRequest $update_transaction_for_customer_request (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateTransactionForCustomerRequest($contract_id, $transaction_id, $update_transaction_for_customer_request = null)
+    {
+        // verify the required parameter 'contract_id' is set
+        if ($contract_id === null || (is_array($contract_id) && count($contract_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $contract_id when calling updateTransactionForCustomer'
+            );
+        }
+        // verify the required parameter 'transaction_id' is set
+        if ($transaction_id === null || (is_array($transaction_id) && count($transaction_id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $transaction_id when calling updateTransactionForCustomer'
+            );
+        }
+
+        $resourcePath = '/{contract_id}/pos/transactions/{transaction_id}/customer';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($contract_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'contract_id' . '}',
+                ObjectSerializer::toPathValue($contract_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($transaction_id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'transaction_id' . '}',
+                ObjectSerializer::toPathValue($transaction_id),
+                $resourcePath
+            );
+        }
+
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                ['application/json']
+            );
+        }
+
+        // for model (json/xml)
+        if (isset($update_transaction_for_customer_request)) {
+            if ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($update_transaction_for_customer_request));
+            } else {
+                $httpBody = $update_transaction_for_customer_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

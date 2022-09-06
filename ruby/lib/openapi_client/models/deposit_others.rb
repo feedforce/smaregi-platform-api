@@ -62,9 +62,9 @@ module OpenapiClient
         :'payment_method_name' => :'String',
         :'deposit_others' => :'String',
         :'payment_unit_price' => :'String',
-        :'payment_change_flag' => :'Float',
+        :'payment_change_flag' => :'String',
         :'payment_division' => :'String',
-        :'payment_securities_flag' => :'Float'
+        :'payment_securities_flag' => :'String'
       }
     end
 

@@ -6,8 +6,10 @@ All URIs are relative to *https://api.smaregi.dev*
 | ------ | ------------ | ----------- |
 | [**create_customers**](DefaultApi.md#create_customers) | **POST** /{contract_id}/pos/customers | 会員情報を登録します。 |
 | [**delete_coupons**](DefaultApi.md#delete_coupons) | **DELETE** /{contract_id}/pos/coupons/{coupon_id} |  |
+| [**delete_customers**](DefaultApi.md#delete_customers) | **DELETE** /{contract_id}/pos/customers/{customer_id} | 会員情報を削除します。 |
 | [**get_coupons**](DefaultApi.md#get_coupons) | **GET** /{contract_id}/pos/coupons | Your GET endpoint |
 | [**get_customer_point_list**](DefaultApi.md#get_customer_point_list) | **GET** /{contract_id}/pos/customers/point | 会員ポイント一覧取得 |
+| [**get_customer_required_column_setting**](DefaultApi.md#get_customer_required_column_setting) | **GET** /{contract_id}/pos/customer_required_column_setting | 会員必須項目設定取得 |
 | [**get_customers**](DefaultApi.md#get_customers) | **GET** /{contract_id}/pos/customers | 会員情報一覧を取得します。 |
 | [**get_layaway_by_id**](DefaultApi.md#get_layaway_by_id) | **GET** /{contract_id}/pos/transactions/layaways/{layaway_id} | Your GET endpoint |
 | [**get_layaway_list**](DefaultApi.md#get_layaway_list) | **GET** /{contract_id}/pos/transactions/layaways | 取置き一覧を取得します。 |
@@ -19,6 +21,7 @@ All URIs are relative to *https://api.smaregi.dev*
 | [**update_customer_point_relative**](DefaultApi.md#update_customer_point_relative) | **POST** /{contract_id}/pos/customers/{customer_id}/point/add |  |
 | [**update_customers**](DefaultApi.md#update_customers) | **PATCH** /{contract_id}/pos/customers/{customer_id} |  |
 | [**update_store**](DefaultApi.md#update_store) | **PATCH** /{contract_id}/pos/stores/{store_id} | 店舗更新 |
+| [**update_transaction_for_customer**](DefaultApi.md#update_transaction_for_customer) | **PATCH** /{contract_id}/pos/transactions/{transaction_id}/customer | 取引会員更新 |
 
 
 ## create_customers
@@ -147,6 +150,74 @@ end
 | ---- | ---- | ----------- | ----- |
 | **contract_id** | **String** | 契約id |  |
 | **coupon_id** | **String** | クーポンid |  |
+
+### Return type
+
+nil (empty response body)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+
+## delete_customers
+
+> delete_customers(contract_id, customer_id)
+
+会員情報を削除します。
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure Bearer authorization: AccessToken
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = OpenapiClient::DefaultApi.new
+contract_id = 'contract_id_example' # String | 契約id
+customer_id = 'customer_id_example' # String | 顧客id
+
+begin
+  # 会員情報を削除します。
+  api_instance.delete_customers(contract_id, customer_id)
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->delete_customers: #{e}"
+end
+```
+
+#### Using the delete_customers_with_http_info variant
+
+This returns an Array which contains the response data (`nil` in this case), status code and headers.
+
+> <Array(nil, Integer, Hash)> delete_customers_with_http_info(contract_id, customer_id)
+
+```ruby
+begin
+  # 会員情報を削除します。
+  data, status_code, headers = api_instance.delete_customers_with_http_info(contract_id, customer_id)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => nil
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->delete_customers_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **contract_id** | **String** | 契約id |  |
+| **customer_id** | **String** | 顧客id |  |
 
 ### Return type
 
@@ -297,6 +368,73 @@ end
 ### Return type
 
 [**Array&lt;GetCustomerPointListItem&gt;**](GetCustomerPointListItem.md)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## get_customer_required_column_setting
+
+> <Array<GetCustomerRequiredColumnSettingResponse>> get_customer_required_column_setting(contract_id)
+
+会員必須項目設定取得
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure Bearer authorization: AccessToken
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = OpenapiClient::DefaultApi.new
+contract_id = 'contract_id_example' # String | 契約id
+
+begin
+  # 会員必須項目設定取得
+  result = api_instance.get_customer_required_column_setting(contract_id)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->get_customer_required_column_setting: #{e}"
+end
+```
+
+#### Using the get_customer_required_column_setting_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<Array<GetCustomerRequiredColumnSettingResponse>>, Integer, Hash)> get_customer_required_column_setting_with_http_info(contract_id)
+
+```ruby
+begin
+  # 会員必須項目設定取得
+  data, status_code, headers = api_instance.get_customer_required_column_setting_with_http_info(contract_id)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <Array<GetCustomerRequiredColumnSettingResponse>>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->get_customer_required_column_setting_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **contract_id** | **String** | 契約id |  |
+
+### Return type
+
+[**Array&lt;GetCustomerRequiredColumnSettingResponse&gt;**](GetCustomerRequiredColumnSettingResponse.md)
 
 ### Authorization
 
@@ -638,7 +776,10 @@ opts = {
   transaction_head_division: OpenapiClient::TransactionHeadDivision::Normal, # TransactionHeadDivision | 
   sort: OpenapiClient::Sort::PRODUCT_CODEDESC, # Sort | 
   terminal_tran_date_time_from: 'terminal_tran_date_time_from_example', # String | 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
-  terminal_tran_date_time_to: 'terminal_tran_date_time_to_example' # String | 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
+  terminal_tran_date_time_to: 'terminal_tran_date_time_to_example', # String | 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
+  store_id: 56, # Integer | 店舗ID
+  transaction_head_id_to: 'transaction_head_id_to_example', # String | 取引ID(To)
+  transaction_head_id_from: 'transaction_head_id_from_example' # String | 取引ID(From)
 }
 
 begin
@@ -684,6 +825,9 @@ end
 | **sort** | [**Sort**](.md) |  | [optional] |
 | **terminal_tran_date_time_from** | **String** | 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] | [optional] |
 | **terminal_tran_date_time_to** | **String** | 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] | [optional] |
+| **store_id** | **Integer** | 店舗ID | [optional] |
+| **transaction_head_id_to** | **String** | 取引ID(To) | [optional] |
+| **transaction_head_id_from** | **String** | 取引ID(From) | [optional] |
 
 ### Return type
 
@@ -1136,6 +1280,81 @@ end
 ### Return type
 
 [**UpdateStoreResponse**](UpdateStoreResponse.md)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+
+## update_transaction_for_customer
+
+> <GetTransactionId> update_transaction_for_customer(contract_id, transaction_id, opts)
+
+取引会員更新
+
+取引の会員情報を更新します。 
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure Bearer authorization: AccessToken
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = OpenapiClient::DefaultApi.new
+contract_id = 'contract_id_example' # String | 契約id
+transaction_id = 'transaction_id_example' # String | 取引id
+opts = {
+  update_transaction_for_customer_request: OpenapiClient::UpdateTransactionForCustomerRequest.new # UpdateTransactionForCustomerRequest | 
+}
+
+begin
+  # 取引会員更新
+  result = api_instance.update_transaction_for_customer(contract_id, transaction_id, opts)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->update_transaction_for_customer: #{e}"
+end
+```
+
+#### Using the update_transaction_for_customer_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<GetTransactionId>, Integer, Hash)> update_transaction_for_customer_with_http_info(contract_id, transaction_id, opts)
+
+```ruby
+begin
+  # 取引会員更新
+  data, status_code, headers = api_instance.update_transaction_for_customer_with_http_info(contract_id, transaction_id, opts)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <GetTransactionId>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling DefaultApi->update_transaction_for_customer_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **contract_id** | **String** | 契約id |  |
+| **transaction_id** | **String** | 取引id |  |
+| **update_transaction_for_customer_request** | [**UpdateTransactionForCustomerRequest**](UpdateTransactionForCustomerRequest.md) |  | [optional] |
+
+### Return type
+
+[**GetTransactionId**](GetTransactionId.md)
 
 ### Authorization
 

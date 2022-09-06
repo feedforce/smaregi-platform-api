@@ -65,9 +65,9 @@ class DepositOthers implements ModelInterface, ArrayAccess, \JsonSerializable
         'payment_method_name' => 'string',
         'deposit_others' => 'string',
         'payment_unit_price' => 'string',
-        'payment_change_flag' => 'float',
+        'payment_change_flag' => 'string',
         'payment_division' => 'string',
-        'payment_securities_flag' => 'float'
+        'payment_securities_flag' => 'string'
     ];
 
     /**
@@ -458,7 +458,7 @@ class DepositOthers implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets payment_change_flag
      *
-     * @return float|null
+     * @return string|null
      */
     public function getPaymentChangeFlag()
     {
@@ -468,7 +468,7 @@ class DepositOthers implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets payment_change_flag
      *
-     * @param float|null $payment_change_flag payment_change_flag
+     * @param string|null $payment_change_flag payment_change_flag
      *
      * @return self
      */
@@ -511,7 +511,7 @@ class DepositOthers implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets payment_securities_flag
      *
-     * @return float|null
+     * @return string|null
      */
     public function getPaymentSecuritiesFlag()
     {
@@ -521,7 +521,7 @@ class DepositOthers implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets payment_securities_flag
      *
-     * @param float|null $payment_securities_flag payment_securities_flag
+     * @param string|null $payment_securities_flag payment_securities_flag
      *
      * @return self
      */

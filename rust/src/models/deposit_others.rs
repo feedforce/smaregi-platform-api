@@ -26,11 +26,11 @@ pub struct DepositOthers {
     #[serde(rename = "paymentUnitPrice", skip_serializing_if = "Option::is_none")]
     pub payment_unit_price: Option<String>,
     #[serde(rename = "paymentChangeFlag", skip_serializing_if = "Option::is_none")]
-    pub payment_change_flag: Option<f32>,
+    pub payment_change_flag: Option<String>,
     #[serde(rename = "paymentDivision", skip_serializing_if = "Option::is_none")]
     pub payment_division: Option<String>,
     #[serde(rename = "paymentSecuritiesFlag", skip_serializing_if = "Option::is_none")]
-    pub payment_securities_flag: Option<f32>,
+    pub payment_securities_flag: Option<String>,
 }
 
 impl DepositOthers {

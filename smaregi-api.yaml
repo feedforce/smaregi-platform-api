@@ -80,6 +80,15 @@ paths:
       parameters:
         - $ref: "#/components/parameters/contract_id"
         - $ref: "#/components/parameters/customer_id"
+    delete:
+      summary: 会員情報を削除します。
+      operationId: deleteCustomers
+      responses:
+        "200":
+          description: OK
+      parameters:
+        - $ref: "#/components/parameters/contract_id"
+        - $ref: "#/components/parameters/customer_id"
   "/{contract_id}/pos/transactions":
     get:
       summary: 取引情報一覧を取得します。
@@ -119,6 +128,21 @@ paths:
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/terminal_tran_date_time-from"
         - $ref: "#/components/parameters/terminal_tran_date_time-to"
+        - schema:
+            type: integer
+          in: query
+          name: store_id
+          description: 店舗ID
+        - schema:
+            type: string
+          in: query
+          name: transaction_head_id-to
+          description: 取引ID(To)
+        - schema:
+            type: string
+          in: query
+          name: transaction_head_id-from
+          description: 取引ID(From)
   "/{contract_id}/pos/transactions/{transaction_id}":
     get:
       summary: 取引情報を取得します。
@@ -143,6 +167,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
+  "/{contract_id}/pos/transactions/{transaction_id}/customer":
+    patch:
+      summary: 取引会員更新
+      operationId: updateTransactionForCustomer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTransactionId"
+      description: "取引の会員情報を更新します。 "
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateTransactionForCustomerRequest"
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+      - $ref: "#/components/parameters/transaction_id"
   "/{contract_id}/pos/transactions/layaways":
     parameters:
       - $ref: "#/components/parameters/contract_id"
@@ -364,6 +408,22 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/updateStoreRequest"
+  "/{contract_id}/pos/customer_required_column_setting":
+    parameters:
+      - $ref: "#/components/parameters/contract_id"
+    get:
+      summary: 会員必須項目設定取得
+      operationId: getCustomerRequiredColumnSetting
+      tags: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/getCustomerRequiredColumnSettingResponse"
 security:
   - AccessToken: []
 components:
@@ -559,6 +619,22 @@ components:
         - Withdrawn
         - Merged
       description: "(0:利用可、1:利用停止、2:紛失、3:退会、4:名寄せ)"
+    pointUpdateDivision:
+      type: string
+      title: pointUpdateDivision
+      enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
+        - NotUpdated
+        - MovePoint
+        - RecalculatePoint
+      description: |-
+        会員ポイントの更新フラグ。
+        0:（デフォルト値）：ポイント変動なし
+        1:変動あり（対象取引によって実際に加算・減算されたポイントの差分を、更新前のユーザーから更新後のユーザーに付け替える形で更新）
+        2:変動あり（更新前・更新後の会員それぞれに対して、現在の会員個人設定または会員ランク、店舗のポイント付与区分を対象取引の内容に照らして、再計算した当該取引におけるポイント差分を反映する形で更新）
     createCustomers:
       description: ""
       type: object
@@ -884,6 +960,17 @@ components:
         - status
         - insDateTime
         - updDateTime
+    updateTransactionForCustomerRequest:
+      description: ""
+      type: object
+      properties:
+        customerId:
+          type: string
+        customerCode:
+          type: string
+        pointUpdateDivision:
+          $ref: "#/components/schemas/pointUpdateDivision"
+      title: ""
     error:
       description: ""
       type: object
@@ -1073,12 +1160,12 @@ components:
           type: string
           minLength: 1
         paymentChangeFlag:
-          type: number
+          type: string
         paymentDivision:
           type: string
           minLength: 1
         paymentSecuritiesFlag:
-          type: number
+          type: string
     getTransactionItem:
       type: object
       properties:
@@ -2997,6 +3084,15 @@ components:
         - Always
         - SpecifiedProductIncluded
       description: 適用条件区分：クーポンの使用条件のうち、対象商品が含まれている必要があるか指定します。（0：全適用、1：対象商品が含まれる場合のみ適用）
+    customerRequiredColumnDivision:
+      type: string
+      enum:
+        - "0"
+        - "1"
+      x-enum-varnames:
+        - Optional
+        - Required
+      description: 設定値：会員登録・更新時に必須項目とするかどうかの設定値。 (0:任意、1:必須)
     postCreateCoupons:
       description: ""
       type: object
@@ -3839,6 +3935,20 @@ components:
         - "productCode:asc"
         - "transactionDateTime:desc"
         - "transactionDateTime:asc"
+    getCustomerRequiredColumnSettingResponse:
+      description: ""
+      type: object
+      x-examples: {}
+      properties:
+        columnName:
+          type: string
+          minLength: 1
+          description: カラム名
+        value:
+          $ref: "#/components/schemas/customerRequiredColumnDivision"
+      required:
+        - columnName
+        - value
   responses:
     getCustomerPointListResponse:
       description: ""

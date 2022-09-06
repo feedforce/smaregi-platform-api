@@ -6,8 +6,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_customers**](DefaultApi.md#create_customers) | **post** /{contract_id}/pos/customers | 会員情報を登録します。
 [**delete_coupons**](DefaultApi.md#delete_coupons) | **delete** /{contract_id}/pos/coupons/{coupon_id} | 
+[**delete_customers**](DefaultApi.md#delete_customers) | **delete** /{contract_id}/pos/customers/{customer_id} | 会員情報を削除します。
 [**get_coupons**](DefaultApi.md#get_coupons) | **get** /{contract_id}/pos/coupons | Your GET endpoint
 [**get_customer_point_list**](DefaultApi.md#get_customer_point_list) | **get** /{contract_id}/pos/customers/point | 会員ポイント一覧取得
+[**get_customer_required_column_setting**](DefaultApi.md#get_customer_required_column_setting) | **get** /{contract_id}/pos/customer_required_column_setting | 会員必須項目設定取得
 [**get_customers**](DefaultApi.md#get_customers) | **get** /{contract_id}/pos/customers | 会員情報一覧を取得します。
 [**get_layaway_by_id**](DefaultApi.md#get_layaway_by_id) | **get** /{contract_id}/pos/transactions/layaways/{layaway_id} | Your GET endpoint
 [**get_layaway_list**](DefaultApi.md#get_layaway_list) | **get** /{contract_id}/pos/transactions/layaways | 取置き一覧を取得します。
@@ -19,6 +21,7 @@ Method | HTTP request | Description
 [**update_customer_point_relative**](DefaultApi.md#update_customer_point_relative) | **post** /{contract_id}/pos/customers/{customer_id}/point/add | 
 [**update_customers**](DefaultApi.md#update_customers) | **patch** /{contract_id}/pos/customers/{customer_id} | 
 [**update_store**](DefaultApi.md#update_store) | **patch** /{contract_id}/pos/stores/{store_id} | 店舗更新
+[**update_transaction_for_customer**](DefaultApi.md#update_transaction_for_customer) | **patch** /{contract_id}/pos/transactions/{transaction_id}/customer | 取引会員更新
 
 
 
@@ -65,6 +68,35 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **contract_id** | **String** | 契約id | [required] |
 **coupon_id** | **String** | クーポンid | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## delete_customers
+
+> delete_customers(contract_id, customer_id)
+会員情報を削除します。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**contract_id** | **String** | 契約id | [required] |
+**customer_id** | **String** | 顧客id | [required] |
 
 ### Return type
 
@@ -132,6 +164,34 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**Vec<crate::models::GetCustomerPointListItem>**](getCustomerPointListItem.md)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_customer_required_column_setting
+
+> Vec<crate::models::GetCustomerRequiredColumnSettingResponse> get_customer_required_column_setting(contract_id)
+会員必須項目設定取得
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**contract_id** | **String** | 契約id | [required] |
+
+### Return type
+
+[**Vec<crate::models::GetCustomerRequiredColumnSettingResponse>**](getCustomerRequiredColumnSettingResponse.md)
 
 ### Authorization
 
@@ -272,7 +332,7 @@ Name | Type | Description  | Required | Notes
 
 ## get_transaction
 
-> Vec<crate::models::GetTransactionItem> get_transaction(contract_id, sum_date, with_layaway, limit, page, upd_date_time_to, upd_date_time_from, customer_code, transaction_head_division, sort, terminal_tran_date_time_from, terminal_tran_date_time_to)
+> Vec<crate::models::GetTransactionItem> get_transaction(contract_id, sum_date, with_layaway, limit, page, upd_date_time_to, upd_date_time_from, customer_code, transaction_head_division, sort, terminal_tran_date_time_from, terminal_tran_date_time_to, store_id, transaction_head_id_to, transaction_head_id_from)
 取引情報一覧を取得します。
 
 ### Parameters
@@ -292,6 +352,9 @@ Name | Type | Description  | Required | Notes
 **sort** | Option<[**crate::models::Sort**](.md)> |  |  |
 **terminal_tran_date_time_from** | Option<**String**> | 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] |  |
 **terminal_tran_date_time_to** | Option<**String**> | 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD] |  |
+**store_id** | Option<**i32**> | 店舗ID |  |
+**transaction_head_id_to** | Option<**String**> | 取引ID(To) |  |
+**transaction_head_id_from** | Option<**String**> | 取引ID(From) |  |
 
 ### Return type
 
@@ -486,6 +549,38 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**crate::models::UpdateStoreResponse**](updateStoreResponse.md)
+
+### Authorization
+
+[AccessToken](../README.md#AccessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## update_transaction_for_customer
+
+> crate::models::GetTransactionId update_transaction_for_customer(contract_id, transaction_id, update_transaction_for_customer_request)
+取引会員更新
+
+取引の会員情報を更新します。 
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**contract_id** | **String** | 契約id | [required] |
+**transaction_id** | **String** | 取引id | [required] |
+**update_transaction_for_customer_request** | Option<[**UpdateTransactionForCustomerRequest**](UpdateTransactionForCustomerRequest.md)> |  |  |
+
+### Return type
+
+[**crate::models::GetTransactionId**](getTransactionId.md)
 
 ### Authorization
 

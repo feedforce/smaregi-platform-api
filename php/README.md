@@ -78,8 +78,10 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**createCustomers**](docs/Api/DefaultApi.md#createcustomers) | **POST** /{contract_id}/pos/customers | 会員情報を登録します。
 *DefaultApi* | [**deleteCoupons**](docs/Api/DefaultApi.md#deletecoupons) | **DELETE** /{contract_id}/pos/coupons/{coupon_id} | 
+*DefaultApi* | [**deleteCustomers**](docs/Api/DefaultApi.md#deletecustomers) | **DELETE** /{contract_id}/pos/customers/{customer_id} | 会員情報を削除します。
 *DefaultApi* | [**getCoupons**](docs/Api/DefaultApi.md#getcoupons) | **GET** /{contract_id}/pos/coupons | Your GET endpoint
 *DefaultApi* | [**getCustomerPointList**](docs/Api/DefaultApi.md#getcustomerpointlist) | **GET** /{contract_id}/pos/customers/point | 会員ポイント一覧取得
+*DefaultApi* | [**getCustomerRequiredColumnSetting**](docs/Api/DefaultApi.md#getcustomerrequiredcolumnsetting) | **GET** /{contract_id}/pos/customer_required_column_setting | 会員必須項目設定取得
 *DefaultApi* | [**getCustomers**](docs/Api/DefaultApi.md#getcustomers) | **GET** /{contract_id}/pos/customers | 会員情報一覧を取得します。
 *DefaultApi* | [**getLayawayById**](docs/Api/DefaultApi.md#getlayawaybyid) | **GET** /{contract_id}/pos/transactions/layaways/{layaway_id} | Your GET endpoint
 *DefaultApi* | [**getLayawayList**](docs/Api/DefaultApi.md#getlayawaylist) | **GET** /{contract_id}/pos/transactions/layaways | 取置き一覧を取得します。
@@ -91,6 +93,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**updateCustomerPointRelative**](docs/Api/DefaultApi.md#updatecustomerpointrelative) | **POST** /{contract_id}/pos/customers/{customer_id}/point/add | 
 *DefaultApi* | [**updateCustomers**](docs/Api/DefaultApi.md#updatecustomers) | **PATCH** /{contract_id}/pos/customers/{customer_id} | 
 *DefaultApi* | [**updateStore**](docs/Api/DefaultApi.md#updatestore) | **PATCH** /{contract_id}/pos/stores/{store_id} | 店舗更新
+*DefaultApi* | [**updateTransactionForCustomer**](docs/Api/DefaultApi.md#updatetransactionforcustomer) | **PATCH** /{contract_id}/pos/transactions/{transaction_id}/customer | 取引会員更新
 
 ## Models
 
@@ -104,12 +107,14 @@ Class | Method | HTTP request | Description
 - [CreateCustomers](docs/Model/CreateCustomers.md)
 - [Customer](docs/Model/Customer.md)
 - [CustomerGroup](docs/Model/CustomerGroup.md)
+- [CustomerRequiredColumnDivision](docs/Model/CustomerRequiredColumnDivision.md)
 - [CustomersResponseOfCreate](docs/Model/CustomersResponseOfCreate.md)
 - [DepositOthers](docs/Model/DepositOthers.md)
 - [DisposeDivision](docs/Model/DisposeDivision.md)
 - [Error](docs/Model/Error.md)
 - [ExpireDivision](docs/Model/ExpireDivision.md)
 - [GetCustomerPointListItem](docs/Model/GetCustomerPointListItem.md)
+- [GetCustomerRequiredColumnSettingResponse](docs/Model/GetCustomerRequiredColumnSettingResponse.md)
 - [GetCustomersItem](docs/Model/GetCustomersItem.md)
 - [GetLayawayById](docs/Model/GetLayawayById.md)
 - [GetLayawayListItem](docs/Model/GetLayawayListItem.md)
@@ -126,6 +131,7 @@ Class | Method | HTTP request | Description
 - [PointGivingDivision](docs/Model/PointGivingDivision.md)
 - [PointSpendDivision](docs/Model/PointSpendDivision.md)
 - [PointSpendLimitDivision](docs/Model/PointSpendLimitDivision.md)
+- [PointUpdateDivision](docs/Model/PointUpdateDivision.md)
 - [PointUseDivision](docs/Model/PointUseDivision.md)
 - [PostCreateCoupons](docs/Model/PostCreateCoupons.md)
 - [ProductDivision](docs/Model/ProductDivision.md)
@@ -147,6 +153,7 @@ Class | Method | HTTP request | Description
 - [UpdateStoreRequestReceiptPrintInfo](docs/Model/UpdateStoreRequestReceiptPrintInfo.md)
 - [UpdateStoreResponse](docs/Model/UpdateStoreResponse.md)
 - [UpdateStoreResponseReceiptPrintInfo](docs/Model/UpdateStoreResponseReceiptPrintInfo.md)
+- [UpdateTransactionForCustomerRequest](docs/Model/UpdateTransactionForCustomerRequest.md)
 - [WithDetails](docs/Model/WithDetails.md)
 - [WithEnum](docs/Model/WithEnum.md)
 

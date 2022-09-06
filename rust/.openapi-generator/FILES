@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 Cargo.toml
 README.md
@@ -13,6 +12,7 @@ docs/CouponsForTransactions.md
 docs/CreateCustomers.md
 docs/Customer.md
 docs/CustomerGroup.md
+docs/CustomerRequiredColumnDivision.md
 docs/CustomersResponseOfCreate.md
 docs/DefaultApi.md
 docs/DepositOthers.md
@@ -20,6 +20,7 @@ docs/DisposeDivision.md
 docs/Error.md
 docs/ExpireDivision.md
 docs/GetCustomerPointListItem.md
+docs/GetCustomerRequiredColumnSettingResponse.md
 docs/GetCustomersItem.md
 docs/GetLayawayById.md
 docs/GetLayawayListItem.md
@@ -36,6 +37,7 @@ docs/PointCondition.md
 docs/PointGivingDivision.md
 docs/PointSpendDivision.md
 docs/PointSpendLimitDivision.md
+docs/PointUpdateDivision.md
 docs/PointUseDivision.md
 docs/PostCreateCoupons.md
 docs/ProductDivision.md
@@ -57,6 +59,7 @@ docs/UpdateStoreRequest.md
 docs/UpdateStoreRequestReceiptPrintInfo.md
 docs/UpdateStoreResponse.md
 docs/UpdateStoreResponseReceiptPrintInfo.md
+docs/UpdateTransactionForCustomerRequest.md
 docs/WithDetails.md
 docs/WithEnum.md
 git_push.sh
@@ -74,12 +77,14 @@ src/models/coupons_for_transactions.rs
 src/models/create_customers.rs
 src/models/customer.rs
 src/models/customer_group.rs
+src/models/customer_required_column_division.rs
 src/models/customers_response_of_create.rs
 src/models/deposit_others.rs
 src/models/dispose_division.rs
 src/models/error.rs
 src/models/expire_division.rs
 src/models/get_customer_point_list_item.rs
+src/models/get_customer_required_column_setting_response.rs
 src/models/get_customers_item.rs
 src/models/get_layaway_by_id.rs
 src/models/get_layaway_list_item.rs
@@ -97,6 +102,7 @@ src/models/point_condition.rs
 src/models/point_giving_division.rs
 src/models/point_spend_division.rs
 src/models/point_spend_limit_division.rs
+src/models/point_update_division.rs
 src/models/point_use_division.rs
 src/models/post_create_coupons.rs
 src/models/product_division.rs
@@ -118,5 +124,6 @@ src/models/update_store_request.rs
 src/models/update_store_request_receipt_print_info.rs
 src/models/update_store_response.rs
 src/models/update_store_response_receipt_print_info.rs
+src/models/update_transaction_for_customer_request.rs
 src/models/with_details.rs
 src/models/with_enum.rs

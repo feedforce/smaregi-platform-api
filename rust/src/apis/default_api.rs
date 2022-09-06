@@ -31,6 +31,15 @@ pub struct DeleteCouponsParams {
     pub coupon_id: String
 }
 
+/// struct for passing parameters to the method `delete_customers`
+#[derive(Clone, Debug)]
+pub struct DeleteCustomersParams {
+    /// 契約id
+    pub contract_id: String,
+    /// 顧客id
+    pub customer_id: String
+}
+
 /// struct for passing parameters to the method `get_coupons`
 #[derive(Clone, Debug)]
 pub struct GetCouponsParams {
@@ -49,6 +58,13 @@ pub struct GetCustomerPointListParams {
     pub page: Option<i32>,
     /// 顧客id
     pub customer_id: Option<String>
+}
+
+/// struct for passing parameters to the method `get_customer_required_column_setting`
+#[derive(Clone, Debug)]
+pub struct GetCustomerRequiredColumnSettingParams {
+    /// 契約id
+    pub contract_id: String
 }
 
 /// struct for passing parameters to the method `get_customers`
@@ -124,7 +140,13 @@ pub struct GetTransactionParams {
     /// 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
     pub terminal_tran_date_time_from: Option<String>,
     /// 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
-    pub terminal_tran_date_time_to: Option<String>
+    pub terminal_tran_date_time_to: Option<String>,
+    /// 店舗ID
+    pub store_id: Option<i32>,
+    /// 取引ID(To)
+    pub transaction_head_id_to: Option<String>,
+    /// 取引ID(From)
+    pub transaction_head_id_from: Option<String>
 }
 
 /// struct for passing parameters to the method `get_transaction_id`
@@ -192,6 +214,16 @@ pub struct UpdateStoreParams {
     pub update_store_request: Option<crate::models::UpdateStoreRequest>
 }
 
+/// struct for passing parameters to the method `update_transaction_for_customer`
+#[derive(Clone, Debug)]
+pub struct UpdateTransactionForCustomerParams {
+    /// 契約id
+    pub contract_id: String,
+    /// 取引id
+    pub transaction_id: String,
+    pub update_transaction_for_customer_request: Option<crate::models::UpdateTransactionForCustomerRequest>
+}
+
 
 /// struct for typed errors of method `create_customers`
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -208,6 +240,13 @@ pub enum DeleteCouponsError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method `delete_customers`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DeleteCustomersError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method `get_coupons`
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -219,6 +258,13 @@ pub enum GetCouponsError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetCustomerPointListError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method `get_customer_required_column_setting`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetCustomerRequiredColumnSettingError {
     UnknownValue(serde_json::Value),
 }
 
@@ -307,6 +353,13 @@ pub enum UpdateStoreError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method `update_transaction_for_customer`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateTransactionForCustomerError {
+    UnknownValue(serde_json::Value),
+}
+
 
 pub async fn create_customers(configuration: &configuration::Configuration, params: CreateCustomersParams) -> Result<crate::models::CustomersResponseOfCreate, Error<CreateCustomersError>> {
     // unbox the parameters
@@ -389,6 +442,48 @@ pub async fn delete_coupons(configuration: &configuration::Configuration, params
         Ok(())
     } else {
         let local_var_entity: Option<DeleteCouponsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn delete_customers(configuration: &configuration::Configuration, params: DeleteCustomersParams) -> Result<(), Error<DeleteCustomersError>> {
+    // unbox the parameters
+    let contract_id = params.contract_id;
+    let customer_id = params.customer_id;
+
+
+    let local_var_client = &configuration.client;
+
+    let local_var_uri_str = format!("{}/{contract_id}/pos/customers/{customer_id}", configuration.base_path, contract_id=crate::apis::urlencode(contract_id), customer_id=crate::apis::urlencode(customer_id));
+    let mut local_var_req_builder = local_var_client.delete(local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    info!("{}", local_var_req.url().as_str());
+    if let Some(Some(body)) = local_var_req.body().map(|b| b.as_bytes()) {
+        info!("{}", std::str::from_utf8(body).unwrap_or_default());
+    }
+    if let Some(q) = local_var_req.url().query() {
+        info!("{}", q);
+    }
+
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+    info!("{}", &local_var_content);
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        Ok(())
+    } else {
+        let local_var_entity: Option<DeleteCustomersError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
@@ -485,6 +580,47 @@ pub async fn get_customer_point_list(configuration: &configuration::Configuratio
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetCustomerPointListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_customer_required_column_setting(configuration: &configuration::Configuration, params: GetCustomerRequiredColumnSettingParams) -> Result<Vec<crate::models::GetCustomerRequiredColumnSettingResponse>, Error<GetCustomerRequiredColumnSettingError>> {
+    // unbox the parameters
+    let contract_id = params.contract_id;
+
+
+    let local_var_client = &configuration.client;
+
+    let local_var_uri_str = format!("{}/{contract_id}/pos/customer_required_column_setting", configuration.base_path, contract_id=crate::apis::urlencode(contract_id));
+    let mut local_var_req_builder = local_var_client.get(local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    info!("{}", local_var_req.url().as_str());
+    if let Some(Some(body)) = local_var_req.body().map(|b| b.as_bytes()) {
+        info!("{}", std::str::from_utf8(body).unwrap_or_default());
+    }
+    if let Some(q) = local_var_req.url().query() {
+        info!("{}", q);
+    }
+
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+    info!("{}", &local_var_content);
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetCustomerRequiredColumnSettingError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
@@ -710,6 +846,9 @@ pub async fn get_transaction(configuration: &configuration::Configuration, param
     let sort = params.sort;
     let terminal_tran_date_time_from = params.terminal_tran_date_time_from;
     let terminal_tran_date_time_to = params.terminal_tran_date_time_to;
+    let store_id = params.store_id;
+    let transaction_head_id_to = params.transaction_head_id_to;
+    let transaction_head_id_from = params.transaction_head_id_from;
 
 
     let local_var_client = &configuration.client;
@@ -749,6 +888,15 @@ pub async fn get_transaction(configuration: &configuration::Configuration, param
     }
     if let Some(ref local_var_str) = terminal_tran_date_time_to {
         local_var_req_builder = local_var_req_builder.query(&[("terminal_tran_date_time-to", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_str) = store_id {
+        local_var_req_builder = local_var_req_builder.query(&[("store_id", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_str) = transaction_head_id_to {
+        local_var_req_builder = local_var_req_builder.query(&[("transaction_head_id-to", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_str) = transaction_head_id_from {
+        local_var_req_builder = local_var_req_builder.query(&[("transaction_head_id-from", &local_var_str.to_string())]);
     }
     if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
@@ -1057,6 +1205,51 @@ pub async fn update_store(configuration: &configuration::Configuration, params: 
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<UpdateStoreError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+/// 取引の会員情報を更新します。 
+pub async fn update_transaction_for_customer(configuration: &configuration::Configuration, params: UpdateTransactionForCustomerParams) -> Result<crate::models::GetTransactionId, Error<UpdateTransactionForCustomerError>> {
+    // unbox the parameters
+    let contract_id = params.contract_id;
+    let transaction_id = params.transaction_id;
+    let update_transaction_for_customer_request = params.update_transaction_for_customer_request;
+
+
+    let local_var_client = &configuration.client;
+
+    let local_var_uri_str = format!("{}/{contract_id}/pos/transactions/{transaction_id}/customer", configuration.base_path, contract_id=crate::apis::urlencode(contract_id), transaction_id=crate::apis::urlencode(transaction_id));
+    let mut local_var_req_builder = local_var_client.patch(local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&update_transaction_for_customer_request);
+
+    let local_var_req = local_var_req_builder.build()?;
+    info!("{}", local_var_req.url().as_str());
+    if let Some(Some(body)) = local_var_req.body().map(|b| b.as_bytes()) {
+        info!("{}", std::str::from_utf8(body).unwrap_or_default());
+    }
+    if let Some(q) = local_var_req.url().query() {
+        info!("{}", q);
+    }
+
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+    info!("{}", &local_var_content);
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<UpdateTransactionForCustomerError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

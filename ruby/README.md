@@ -86,8 +86,10 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *OpenapiClient::DefaultApi* | [**create_customers**](docs/DefaultApi.md#create_customers) | **POST** /{contract_id}/pos/customers | 会員情報を登録します。
 *OpenapiClient::DefaultApi* | [**delete_coupons**](docs/DefaultApi.md#delete_coupons) | **DELETE** /{contract_id}/pos/coupons/{coupon_id} | 
+*OpenapiClient::DefaultApi* | [**delete_customers**](docs/DefaultApi.md#delete_customers) | **DELETE** /{contract_id}/pos/customers/{customer_id} | 会員情報を削除します。
 *OpenapiClient::DefaultApi* | [**get_coupons**](docs/DefaultApi.md#get_coupons) | **GET** /{contract_id}/pos/coupons | Your GET endpoint
 *OpenapiClient::DefaultApi* | [**get_customer_point_list**](docs/DefaultApi.md#get_customer_point_list) | **GET** /{contract_id}/pos/customers/point | 会員ポイント一覧取得
+*OpenapiClient::DefaultApi* | [**get_customer_required_column_setting**](docs/DefaultApi.md#get_customer_required_column_setting) | **GET** /{contract_id}/pos/customer_required_column_setting | 会員必須項目設定取得
 *OpenapiClient::DefaultApi* | [**get_customers**](docs/DefaultApi.md#get_customers) | **GET** /{contract_id}/pos/customers | 会員情報一覧を取得します。
 *OpenapiClient::DefaultApi* | [**get_layaway_by_id**](docs/DefaultApi.md#get_layaway_by_id) | **GET** /{contract_id}/pos/transactions/layaways/{layaway_id} | Your GET endpoint
 *OpenapiClient::DefaultApi* | [**get_layaway_list**](docs/DefaultApi.md#get_layaway_list) | **GET** /{contract_id}/pos/transactions/layaways | 取置き一覧を取得します。
@@ -99,6 +101,7 @@ Class | Method | HTTP request | Description
 *OpenapiClient::DefaultApi* | [**update_customer_point_relative**](docs/DefaultApi.md#update_customer_point_relative) | **POST** /{contract_id}/pos/customers/{customer_id}/point/add | 
 *OpenapiClient::DefaultApi* | [**update_customers**](docs/DefaultApi.md#update_customers) | **PATCH** /{contract_id}/pos/customers/{customer_id} | 
 *OpenapiClient::DefaultApi* | [**update_store**](docs/DefaultApi.md#update_store) | **PATCH** /{contract_id}/pos/stores/{store_id} | 店舗更新
+*OpenapiClient::DefaultApi* | [**update_transaction_for_customer**](docs/DefaultApi.md#update_transaction_for_customer) | **PATCH** /{contract_id}/pos/transactions/{transaction_id}/customer | 取引会員更新
 
 
 ## Documentation for Models
@@ -113,12 +116,14 @@ Class | Method | HTTP request | Description
  - [OpenapiClient::CreateCustomers](docs/CreateCustomers.md)
  - [OpenapiClient::Customer](docs/Customer.md)
  - [OpenapiClient::CustomerGroup](docs/CustomerGroup.md)
+ - [OpenapiClient::CustomerRequiredColumnDivision](docs/CustomerRequiredColumnDivision.md)
  - [OpenapiClient::CustomersResponseOfCreate](docs/CustomersResponseOfCreate.md)
  - [OpenapiClient::DepositOthers](docs/DepositOthers.md)
  - [OpenapiClient::DisposeDivision](docs/DisposeDivision.md)
  - [OpenapiClient::Error](docs/Error.md)
  - [OpenapiClient::ExpireDivision](docs/ExpireDivision.md)
  - [OpenapiClient::GetCustomerPointListItem](docs/GetCustomerPointListItem.md)
+ - [OpenapiClient::GetCustomerRequiredColumnSettingResponse](docs/GetCustomerRequiredColumnSettingResponse.md)
  - [OpenapiClient::GetCustomersItem](docs/GetCustomersItem.md)
  - [OpenapiClient::GetLayawayById](docs/GetLayawayById.md)
  - [OpenapiClient::GetLayawayListItem](docs/GetLayawayListItem.md)
@@ -135,6 +140,7 @@ Class | Method | HTTP request | Description
  - [OpenapiClient::PointGivingDivision](docs/PointGivingDivision.md)
  - [OpenapiClient::PointSpendDivision](docs/PointSpendDivision.md)
  - [OpenapiClient::PointSpendLimitDivision](docs/PointSpendLimitDivision.md)
+ - [OpenapiClient::PointUpdateDivision](docs/PointUpdateDivision.md)
  - [OpenapiClient::PointUseDivision](docs/PointUseDivision.md)
  - [OpenapiClient::PostCreateCoupons](docs/PostCreateCoupons.md)
  - [OpenapiClient::ProductDivision](docs/ProductDivision.md)
@@ -156,6 +162,7 @@ Class | Method | HTTP request | Description
  - [OpenapiClient::UpdateStoreRequestReceiptPrintInfo](docs/UpdateStoreRequestReceiptPrintInfo.md)
  - [OpenapiClient::UpdateStoreResponse](docs/UpdateStoreResponse.md)
  - [OpenapiClient::UpdateStoreResponseReceiptPrintInfo](docs/UpdateStoreResponseReceiptPrintInfo.md)
+ - [OpenapiClient::UpdateTransactionForCustomerRequest](docs/UpdateTransactionForCustomerRequest.md)
  - [OpenapiClient::WithDetails](docs/WithDetails.md)
  - [OpenapiClient::WithEnum](docs/WithEnum.md)
 

@@ -10,9 +10,9 @@
 | **payment_method_name** | **String** |  | [optional] |
 | **deposit_others** | **String** |  | [optional] |
 | **payment_unit_price** | **String** |  | [optional] |
-| **payment_change_flag** | **Float** |  | [optional] |
+| **payment_change_flag** | **String** |  | [optional] |
 | **payment_division** | **String** |  | [optional] |
-| **payment_securities_flag** | **Float** |  | [optional] |
+| **payment_securities_flag** | **String** |  | [optional] |
 
 ## Example
 

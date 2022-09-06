@@ -149,6 +149,71 @@ module OpenapiClient
       return data, status_code, headers
     end
 
+    # 会員情報を削除します。
+    # @param contract_id [String] 契約id
+    # @param customer_id [String] 顧客id
+    # @param [Hash] opts the optional parameters
+    # @return [nil]
+    def delete_customers(contract_id, customer_id, opts = {})
+      delete_customers_with_http_info(contract_id, customer_id, opts)
+      nil
+    end
+
+    # 会員情報を削除します。
+    # @param contract_id [String] 契約id
+    # @param customer_id [String] 顧客id
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
+    def delete_customers_with_http_info(contract_id, customer_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: DefaultApi.delete_customers ...'
+      end
+      # verify the required parameter 'contract_id' is set
+      if @api_client.config.client_side_validation && contract_id.nil?
+        fail ArgumentError, "Missing the required parameter 'contract_id' when calling DefaultApi.delete_customers"
+      end
+      # verify the required parameter 'customer_id' is set
+      if @api_client.config.client_side_validation && customer_id.nil?
+        fail ArgumentError, "Missing the required parameter 'customer_id' when calling DefaultApi.delete_customers"
+      end
+      # resource path
+      local_var_path = '/{contract_id}/pos/customers/{customer_id}'.sub('{' + 'contract_id' + '}', CGI.escape(contract_id.to_s)).sub('{' + 'customer_id' + '}', CGI.escape(customer_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type]
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['AccessToken']
+
+      new_options = opts.merge(
+        :operation => :"DefaultApi.delete_customers",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DefaultApi#delete_customers\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Your GET endpoint
     # クーポンの一覧を取得します。
     # @param contract_id [String] 契約id
@@ -280,6 +345,67 @@ module OpenapiClient
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: DefaultApi#get_customer_point_list\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # 会員必須項目設定取得
+    # @param contract_id [String] 契約id
+    # @param [Hash] opts the optional parameters
+    # @return [Array<GetCustomerRequiredColumnSettingResponse>]
+    def get_customer_required_column_setting(contract_id, opts = {})
+      data, _status_code, _headers = get_customer_required_column_setting_with_http_info(contract_id, opts)
+      data
+    end
+
+    # 会員必須項目設定取得
+    # @param contract_id [String] 契約id
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(Array<GetCustomerRequiredColumnSettingResponse>, Integer, Hash)>] Array<GetCustomerRequiredColumnSettingResponse> data, response status code and response headers
+    def get_customer_required_column_setting_with_http_info(contract_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: DefaultApi.get_customer_required_column_setting ...'
+      end
+      # verify the required parameter 'contract_id' is set
+      if @api_client.config.client_side_validation && contract_id.nil?
+        fail ArgumentError, "Missing the required parameter 'contract_id' when calling DefaultApi.get_customer_required_column_setting"
+      end
+      # resource path
+      local_var_path = '/{contract_id}/pos/customer_required_column_setting'.sub('{' + 'contract_id' + '}', CGI.escape(contract_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Array<GetCustomerRequiredColumnSettingResponse>'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['AccessToken']
+
+      new_options = opts.merge(
+        :operation => :"DefaultApi.get_customer_required_column_setting",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DefaultApi#get_customer_required_column_setting\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -580,6 +706,9 @@ module OpenapiClient
     # @option opts [Sort] :sort 
     # @option opts [String] :terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
     # @option opts [String] :terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
+    # @option opts [Integer] :store_id 店舗ID
+    # @option opts [String] :transaction_head_id_to 取引ID(To)
+    # @option opts [String] :transaction_head_id_from 取引ID(From)
     # @return [Array<GetTransactionItem>]
     def get_transaction(contract_id, opts = {})
       data, _status_code, _headers = get_transaction_with_http_info(contract_id, opts)
@@ -600,6 +729,9 @@ module OpenapiClient
     # @option opts [Sort] :sort 
     # @option opts [String] :terminal_tran_date_time_from 端末取引日時(From)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
     # @option opts [String] :terminal_tran_date_time_to 端末取引日時(To)：端末で設定された取引日時。[YYYY-MM-DDThh:mm:ssTZD]
+    # @option opts [Integer] :store_id 店舗ID
+    # @option opts [String] :transaction_head_id_to 取引ID(To)
+    # @option opts [String] :transaction_head_id_from 取引ID(From)
     # @return [Array<(Array<GetTransactionItem>, Integer, Hash)>] Array<GetTransactionItem> data, response status code and response headers
     def get_transaction_with_http_info(contract_id, opts = {})
       if @api_client.config.debugging
@@ -625,6 +757,9 @@ module OpenapiClient
       query_params[:'sort'] = opts[:'sort'] if !opts[:'sort'].nil?
       query_params[:'terminal_tran_date_time-from'] = opts[:'terminal_tran_date_time_from'] if !opts[:'terminal_tran_date_time_from'].nil?
       query_params[:'terminal_tran_date_time-to'] = opts[:'terminal_tran_date_time_to'] if !opts[:'terminal_tran_date_time_to'].nil?
+      query_params[:'store_id'] = opts[:'store_id'] if !opts[:'store_id'].nil?
+      query_params[:'transaction_head_id-to'] = opts[:'transaction_head_id_to'] if !opts[:'transaction_head_id_to'].nil?
+      query_params[:'transaction_head_id-from'] = opts[:'transaction_head_id_from'] if !opts[:'transaction_head_id_from'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}
@@ -1090,6 +1225,79 @@ module OpenapiClient
       data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: DefaultApi#update_store\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # 取引会員更新
+    # 取引の会員情報を更新します。 
+    # @param contract_id [String] 契約id
+    # @param transaction_id [String] 取引id
+    # @param [Hash] opts the optional parameters
+    # @option opts [UpdateTransactionForCustomerRequest] :update_transaction_for_customer_request 
+    # @return [GetTransactionId]
+    def update_transaction_for_customer(contract_id, transaction_id, opts = {})
+      data, _status_code, _headers = update_transaction_for_customer_with_http_info(contract_id, transaction_id, opts)
+      data
+    end
+
+    # 取引会員更新
+    # 取引の会員情報を更新します。 
+    # @param contract_id [String] 契約id
+    # @param transaction_id [String] 取引id
+    # @param [Hash] opts the optional parameters
+    # @option opts [UpdateTransactionForCustomerRequest] :update_transaction_for_customer_request 
+    # @return [Array<(GetTransactionId, Integer, Hash)>] GetTransactionId data, response status code and response headers
+    def update_transaction_for_customer_with_http_info(contract_id, transaction_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: DefaultApi.update_transaction_for_customer ...'
+      end
+      # verify the required parameter 'contract_id' is set
+      if @api_client.config.client_side_validation && contract_id.nil?
+        fail ArgumentError, "Missing the required parameter 'contract_id' when calling DefaultApi.update_transaction_for_customer"
+      end
+      # verify the required parameter 'transaction_id' is set
+      if @api_client.config.client_side_validation && transaction_id.nil?
+        fail ArgumentError, "Missing the required parameter 'transaction_id' when calling DefaultApi.update_transaction_for_customer"
+      end
+      # resource path
+      local_var_path = '/{contract_id}/pos/transactions/{transaction_id}/customer'.sub('{' + 'contract_id' + '}', CGI.escape(contract_id.to_s)).sub('{' + 'transaction_id' + '}', CGI.escape(transaction_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+      # HTTP header 'Content-Type'
+      header_params['Content-Type'] = @api_client.select_header_content_type(['application/json'])
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(opts[:'update_transaction_for_customer_request'])
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'GetTransactionId'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['AccessToken']
+
+      new_options = opts.merge(
+        :operation => :"DefaultApi.update_transaction_for_customer",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DefaultApi#update_transaction_for_customer\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
